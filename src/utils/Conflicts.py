@@ -33,3 +33,10 @@ class Conflicts:
             conflict_graph = Conflicts.check(conflict_graph, conflicting_courses)
         
         return conflict_graph
+    
+    @staticmethod
+    def print(conflict_graph):
+        print("CONFLICT GRAPH:")
+        for vertex in conflict_graph.adjacency_list:
+            conflicts = [str(course) for course in conflict_graph.adjacency_list[vertex]]
+            print(f'{str(vertex)}: {str(conflicts)}')

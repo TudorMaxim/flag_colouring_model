@@ -31,3 +31,7 @@ class Graph:
         if vertex not in self.adjacency_list:
             return 0
         return len(self.adjacency_list[vertex])
+
+    def get_vertices_degrees(self):
+        degrees = [(vertex, self.get_vertex_degree(vertex)) for vertex in self.get_vertices()]
+        return sorted(degrees, key=lambda x: x[1], reverse=True)
