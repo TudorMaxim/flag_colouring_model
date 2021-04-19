@@ -1,0 +1,48 @@
+{
+    "courses": [{
+        "id": 1,
+        "name": "Dstributed Ledgers and CryptoCurrencies"
+    }, {
+        "id": 2,
+        "name": "Model Driven Development"
+    }, {
+        "id": 3,
+        "name": "Big Data Technologies"
+    }, {
+        "id": 4,
+        "name": "Software Engineering for Finacial Systems"
+    }],
+
+    "teachers": [{
+        "id": 1,
+        "name": "Prof. Jon Doe"
+    }, {
+        "id": 2,
+        "name": "Prof. Jane Doe"
+    }],
+
+    "students": [{
+        "id": 1,
+        "name": "Tudor Maxim"
+    },{
+        "id": 2,
+        "name": "Jon Snow"
+    },{
+        "id": 3,
+        "name": "Jane Snow"
+    },{
+        "id": 4,
+        "name": "Mark Doe"
+    }, {
+        "id": 5,
+        "name": "Ana Doe"
+    }],
+
+    "rooms": [{
+        "id": 1,
+        "name": "Room 1"
+    },{
+        "id": 2,
+        "name": "Room 2"
+    }]
+}
