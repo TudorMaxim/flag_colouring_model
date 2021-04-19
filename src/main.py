@@ -3,6 +3,7 @@ from model.Teacher import Teacher
 from model.Course import Course
 from model.Graph import Graph
 from utils.Conflicts import Conflicts
+from datetime import datetime
 
 
 def valid_colouring(colour_map, course, graph):
@@ -48,10 +49,12 @@ if __name__ == '__main__':
     
     Conflicts.print(conflict_graph)
 
+    start_time = datetime.now()
     colouring = largest_degree_ordering(conflict_graph)
+    elapsed = datetime.now() - start_time
 
     print("\nTIMETABLE:")
     for course in colouring:
         print(f'{course}: Colour#{colouring[course]}')
 
-    
+    print(f'Elapsed time: {elapsed.total_seconds() * 1000} ms')
