@@ -44,10 +44,11 @@ def largest_degree_ordering(graph):
 if __name__ == '__main__':
     students = Student.from_json()
     teachers = Teacher.from_json()
-    courses = Course.from_json()
-    conflict_graph = Conflicts.build_graph(students, teachers, courses)
+    courses = Course.build_ids_map(Course.from_json())
+    conflict_graph = Conflicts.build_graph(students, teachers)
     
-    Conflicts.print(conflict_graph)
+    print("CONFLICT GRAPH:")
+    print(conflict_graph.adjacency_list)
 
     start_time = datetime.now()
     colouring = largest_degree_ordering(conflict_graph)
@@ -57,4 +58,4 @@ if __name__ == '__main__':
     for course in colouring:
         print(f'{course}: Colour#{colouring[course]}')
 
-    print(f'Elapsed time: {elapsed.total_seconds() * 1000} ms')
+    print(f'\n\nElapsed time: {elapsed.total_seconds() * 1000} ms')
