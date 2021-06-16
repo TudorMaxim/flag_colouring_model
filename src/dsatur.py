@@ -1,34 +1,43 @@
+from model.Graph import Graph
 from model.Student import Student
 from model.Teacher import Teacher
 from model.Course import Course
-from model.Graph import Graph
 from utils.Conflicts import Conflicts
+from utils.GraphUtils import GraphUtils
 from datetime import datetime
 
 
-def valid_colouring(colour_map, course, graph):
-    for neighbour in graph.get_neighbours(course):
-        if colour_map[course] == colour_map[neighbour]:
-            return False
-    return True
+def saturation_degree(course: int, graph: Graph, colour_map: dict) -> int:
+    used_colours = []
+    for vertex in graph.get_neighbours(course):
+        if colour_map[vertex] and colour_map[vertex] not in used_colours:
+            used_colours.append(colour_map[vertex])
+    return len(used_colours)
 
 
-def largest_degree_ordering(graph):
-    degrees_queue = graph.get_vertices_degrees()
-    colours_set = [i for i in range(1, 56)]
+def uncoloured_neighbours_count(course: int, graph: Graph, colour_map: dict) -> int:
+    degree = 0
+    for vertex in graph.get_neighbours(course):
+        degree += 1 if colour_map[vertex] == 0 else 0
+    return degree
+
+
+def degree_of_saturation_algorithm(graph: Graph) -> dict:
+    queue = graph.get_vertices_degrees()
+    colours_set = [i for i in range(1, 60)]
     max_colour = -1
     used_colours = []
     colours_map = {}
-    for (course, degree) in degrees_queue:
+    for (course, _) in queue:
         colours_map[course] = 0
     
-    while len(degrees_queue) > 0:
-        (course, _) = degrees_queue.pop(0)
+    while len(queue) > 0:
+        (course, _) = queue.pop(0)
         
         # Try colouring with an already used colour
         for colour in used_colours:
             colours_map[course] = colour
-            if valid_colouring(colours_map, course, graph):
+            if GraphUtils.valid_colouring(course, graph, colours_map):
                 break
             colours_map[course] = 0 # Try next colour
         
@@ -37,9 +46,17 @@ def largest_degree_ordering(graph):
             max_colour += 1
             used_colours.append(colours_set[max_colour])
             colours_map[course] = used_colours[-1]
-    
+
+        queue = sorted(
+            queue,
+            key=lambda course: (
+                saturation_degree(course, graph, colours_map),
+                uncoloured_neighbours_count(course, graph, colours_map)
+            ),
+            reverse=True
+        )
     return colours_map
-        
+
 
 if __name__ == '__main__':
     students = Student.from_json()
@@ -51,7 +68,7 @@ if __name__ == '__main__':
     print(conflict_graph.adjacency_list)
 
     start_time = datetime.now()
-    colouring = largest_degree_ordering(conflict_graph)
+    colouring = degree_of_saturation_algorithm(conflict_graph)
     elapsed = datetime.now() - start_time
 
     print("\nTIMETABLE:")
