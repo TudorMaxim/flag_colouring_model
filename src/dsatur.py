@@ -3,7 +3,6 @@ from model.Student import Student
 from model.Teacher import Teacher
 from model.Course import Course
 from utils.Conflicts import Conflicts
-from utils.GraphUtils import GraphUtils
 from datetime import datetime
 
 
@@ -24,20 +23,20 @@ def uncoloured_neighbours_count(course: int, graph: Graph, colour_map: dict) -> 
 
 def degree_of_saturation_algorithm(graph: Graph) -> dict:
     queue = graph.get_vertices_degrees()
-    colours_set = [i for i in range(1, 60)]
+    colours_set = [i for i in range(1, 61)]
     max_colour = -1
     used_colours = []
     colours_map = {}
     for (course, _) in queue:
         colours_map[course] = 0
     
-    while len(queue) > 0:
+    while queue:
         (course, _) = queue.pop(0)
         
         # Try colouring with an already used colour
         for colour in used_colours:
             colours_map[course] = colour
-            if GraphUtils.valid_colouring(course, graph, colours_map):
+            if graph.valid_colouring_for(course, colours_map):
                 break
             colours_map[course] = 0 # Try next colour
         
