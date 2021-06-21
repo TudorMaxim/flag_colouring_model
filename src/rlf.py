@@ -16,11 +16,16 @@ def get_common_neighbours(v: int, graph: Graph, vertices_set: List) -> List:
 def select_vertex(graph: Graph, candidates: List, noncandidates: List) -> int:
     selected = candidates[0]
     max_common_neighbours = 0
+    min_candidate_neighbours = 1e5
     for vertex in candidates:
         common_neighbours = get_common_neighbours(vertex, graph, noncandidates)
         common_neighbours_cnt = len(common_neighbours)
-        if common_neighbours_cnt > max_common_neighbours:
+        candidate_neighbours = get_common_neighbours(vertex, graph, candidates)
+        candidate_neighbours_cnt = len(candidate_neighbours)
+        if common_neighbours_cnt > max_common_neighbours or \
+            (common_neighbours_cnt == max_common_neighbours and candidate_neighbours_cnt < min_candidate_neighbours):
             max_common_neighbours = common_neighbours_cnt
+            min_candidate_neighbours = candidate_neighbours_cnt
             selected = vertex
     return selected
 
