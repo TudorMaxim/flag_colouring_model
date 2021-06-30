@@ -1,11 +1,6 @@
 import numpy as np
 from typing import List
 from model.Graph import Graph
-from model.Student import Student
-from model.Teacher import Teacher
-from model.Course import Course
-from utils.Conflicts import Conflicts
-from datetime import datetime
 
 
 def get_common_neighbours(v: int, graph: Graph, vertices_set: List) -> List:
@@ -55,23 +50,4 @@ def recursive_largest_first_algorithm(graph: Graph) -> dict:
         candidates = list(filter(lambda x: x not in colour_map, candidates))
         active_colour += 1
     return colour_map
-        
-       
-if __name__ == '__main__':
-    students = Student.from_json()
-    teachers = Teacher.from_json()
-    courses = Course.build_ids_map(Course.from_json())
-    conflict_graph = Conflicts.build_graph(students, teachers)
-    
-    print("CONFLICT GRAPH:")
-    print(conflict_graph.adjacency_list)
 
-    start_time = datetime.now()
-    colouring = recursive_largest_first_algorithm(conflict_graph)
-    elapsed = datetime.now() - start_time
-
-    print("\nTIMETABLE:")
-    for course in colouring:
-        print(f'{course}: Colour#{colouring[course]}')
-
-    print(f'\n\nElapsed time: {elapsed.total_seconds() * 1000} ms')
