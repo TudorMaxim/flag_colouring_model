@@ -45,3 +45,11 @@ class Graph:
             if colour_map[vertex] == colour_map[neighbour]:
                 return False
         return True
+
+    def valid_colouring(self, colour_map: dict) -> bool:
+        for vertex in self.get_vertices():
+            if vertex not in colour_map or colour_map[vertex] == 0: # Uncoloured vertex
+                return False
+            if not self.valid_colouring_for(vertex, colour_map): # 2 adjacent vertices having the same colour
+                return False
+        return True

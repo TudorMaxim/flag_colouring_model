@@ -1,8 +1,9 @@
-import argparse
+from argparse import ArgumentParser
 from datetime import datetime
 from model.Student import Student
 from model.Teacher import Teacher
 from model.Course import Course
+from utils import Constants
 from utils.Conflicts import Conflicts
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
@@ -10,11 +11,11 @@ from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
 from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+def setup_parser() -> ArgumentParser:
+    parser = ArgumentParser()
     parser.add_argument(
         '--algorithm',
-        '-a', 
+        '-a',
         choices=['ldo', 'dsatur', 'rlf', 'ea'],
         default='dsatur',
         help='Algorithm used for colouring the conflict graph.'
@@ -25,6 +26,29 @@ if __name__ == '__main__':
         default='./datasets/small_dataset.json',
         help='Path to the dataset inteded to be used'
     )
+    parser.add_argument(
+        '--generations',
+        '-g',
+        default=Constants.GENERATIONS_CNT,
+        help='The number of generations when using the evolutionary algorithm. In case of heuristics, this argument is ignored.'
+    )
+    parser.add_argument(
+        '--population',
+        '-p',
+        default=Constants.POPULATION_CNT,
+        help='The size of a population when using the evolutionary algorithm. In case of heuristics, this argument is ignored.'
+    )
+    parser.add_argument(
+        '--mutation',
+        '-m',
+        default=Constants.MUTATION_PROBABILITY,
+        help='The mutation probability when using the evolutionary algorithm. In case of heuristics, this argument is ignored.'
+    )
+    return parser
+
+
+if __name__ == '__main__':
+    parser = setup_parser()
     args = parser.parse_args()
 
     students = Student.from_json(args.dataset)
@@ -42,6 +66,11 @@ if __name__ == '__main__':
         'ea': EvolutionaryAlgorithm
     }
     colouring_algorithm = options.get(args.algorithm)(conflict_graph)
+    if isinstance(colouring_algorithm, EvolutionaryAlgorithm):
+        colouring_algorithm.generations_cnt = int(args.generations)
+        colouring_algorithm.population_cnt = int(args.population)
+        colouring_algorithm.mutation_probability = int(args.mutation)
+    
     colours_set = [i for i in range(1, 61)]
     start_time = datetime.now()
     colouring = colouring_algorithm.run(colours_set)
