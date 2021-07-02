@@ -4,10 +4,10 @@ from model.Student import Student
 from model.Teacher import Teacher
 from model.Course import Course
 from utils.Conflicts import Conflicts
-from algorithms.ldo import largest_degree_ordering
-from algorithms.dsatur import degree_of_saturation_algorithm
-from algorithms.rlf import recursive_largest_first_algorithm
-from algorithms.ea import evolutionary_algorithm
+from algorithms.DegreeOfSaturation import DegreeOfSaturation
+from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
+from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
+from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
 
 
 if __name__ == '__main__':
@@ -27,14 +27,6 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    switcher = {
-        'ldo': largest_degree_ordering,
-        'dsatur': degree_of_saturation_algorithm,
-        'rlf': recursive_largest_first_algorithm,
-        'ea': evolutionary_algorithm
-    }
-    colouring_algorithm = switcher.get(args.algorithm)
-
     students = Student.from_json(args.dataset)
     teachers = Teacher.from_json(args.dataset)
     courses = Course.build_ids_map(Course.from_json(args.dataset))
@@ -43,8 +35,16 @@ if __name__ == '__main__':
     print("CONFLICT GRAPH:")
     print(conflict_graph.adjacency_list)
 
+    options = {
+        'ldo': LargestDegreeOrdering,
+        'dsatur': DegreeOfSaturation,
+        'rlf': RecursiveLargestFirst,
+        'ea': EvolutionaryAlgorithm
+    }
+    colouring_algorithm = options.get(args.algorithm)(conflict_graph)
+    colours_set = [i for i in range(1, 61)]
     start_time = datetime.now()
-    colouring = colouring_algorithm(conflict_graph)
+    colouring = colouring_algorithm.run(colours_set)
     elapsed = datetime.now() - start_time
 
     print("\nTIMETABLE:")
