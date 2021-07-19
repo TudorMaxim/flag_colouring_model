@@ -5,8 +5,8 @@ from algorithms.AbstractColouringAlgorithm import AbstractColouringAlgorithm
 
 
 class RecursiveLargestFirst(AbstractColouringAlgorithm):
-    def __init__(self, graph: Graph) -> None:
-        super().__init__(graph)
+    def __init__(self, graph: Graph, courses_map: dict = None) -> None:
+        super().__init__(graph, courses_map)
 
     def __get_common_neighbours(self, v: int, vertices_set: List) -> List:
         neighbours = self._graph.get_neighbours(v)

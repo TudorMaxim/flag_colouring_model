@@ -4,8 +4,8 @@ from algorithms.AbstractColouringAlgorithm import AbstractColouringAlgorithm
 
 
 class LargestDegreeOrdering(AbstractColouringAlgorithm):
-    def __init__(self, graph: Graph) -> None:
-        super().__init__(graph)
+    def __init__(self, graph: Graph, courses_map: dict = None) -> None:
+        super().__init__(graph, courses_map)
     
     def run(self, colours_set: List) -> dict:
         queue = self._graph.get_vertices_degrees()

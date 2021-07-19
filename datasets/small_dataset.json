@@ -1,16 +1,20 @@
 {
     "courses": [{
         "id": 1,
-        "name": "Dstributed Ledgers and CryptoCurrencies"
+        "name": "Dstributed Ledgers and CryptoCurrencies",
+        "teacher_id": 1
     }, {
         "id": 2,
-        "name": "Model Driven Development"
+        "name": "Model Driven Development",
+        "teacher_id": 2
     }, {
         "id": 3,
-        "name": "Big Data Technologies"
+        "name": "Big Data Technologies",
+        "teacher_id": 1
     }, {
         "id": 4,
-        "name": "Software Engineering for Finacial Systems"
+        "name": "Software Engineering for Finacial Systems",
+        "teacher_id": 2
     }],
 
     "teachers": [{

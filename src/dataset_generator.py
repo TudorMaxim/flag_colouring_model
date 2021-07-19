@@ -47,6 +47,11 @@ def assign_courses_to_teachers(teachers: List, c: int, t: int) -> List:
             teachers[idx]['course_ids'] = [course_ids[i]]
     return teachers
 
+def find_teacher_id(teachers: List, course_id: int) -> int:
+    for teacher in teachers:
+        if course_id in teacher['course_ids']:
+            return teacher['id']
+    raise ValueError(f'Error: Could not find a teacher for course with id {course_id}.') 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -100,10 +105,17 @@ if __name__ == '__main__':
 
     minn = int(args.min_enrolment)
     maxx = int(args.max_enrolment)
+
+    teachers = assign_courses_to_teachers(teachers, c, t)
+    students = assign_courses_to_students(students, c, minn, maxx)
+
+    for i in range(len(courses)):
+        courses[i]['teacher_id'] = find_teacher_id(teachers, courses[i]['id'])
+    
     dataset = {
         'courses': courses,
-        'teachers': assign_courses_to_teachers(teachers, c, t),
-        'students': assign_courses_to_students(students, c, minn, maxx),
+        'teachers': teachers,
+        'students': students,
         'rooms': rooms
     }
 

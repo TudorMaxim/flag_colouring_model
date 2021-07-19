@@ -4,8 +4,8 @@ from algorithms.AbstractColouringAlgorithm import AbstractColouringAlgorithm
 
 
 class DegreeOfSaturation(AbstractColouringAlgorithm):
-    def __init__(self, graph: Graph) -> None:
-        super().__init__(graph)
+    def __init__(self, graph: Graph, courses_map: dict = None) -> None:
+        super().__init__(graph, courses_map)
 
     def saturation_degree(self, course: int, colour_map: dict) -> int:
         used_colours = []

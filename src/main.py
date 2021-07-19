@@ -51,6 +51,8 @@ if __name__ == '__main__':
     parser = setup_parser()
     args = parser.parse_args()
 
+    print(f'\nParsing dataset {args.dataset}\n')
+
     students = Student.from_json(args.dataset)
     teachers = Teacher.from_json(args.dataset)
     courses = Course.build_ids_map(Course.from_json(args.dataset))
@@ -65,18 +67,20 @@ if __name__ == '__main__':
         'rlf': RecursiveLargestFirst,
         'ea': EvolutionaryAlgorithm
     }
-    colouring_algorithm = options.get(args.algorithm)(conflict_graph)
+    colouring_algorithm = options.get(args.algorithm)(graph=conflict_graph, courses_map=courses)
     if isinstance(colouring_algorithm, EvolutionaryAlgorithm):
         colouring_algorithm.generations_cnt = int(args.generations)
         colouring_algorithm.population_cnt = int(args.population)
         colouring_algorithm.mutation_probability = int(args.mutation)
     
+    print(f'\nExecuting algorithm: {args.algorithm}\n')
+
     colours_set = [i for i in range(1, 61)]
     start_time = datetime.now()
     colouring = colouring_algorithm.run(colours_set)
     elapsed = datetime.now() - start_time
 
-    print("\nTIMETABLE:")
+    print("TIMETABLE:")
     used_colours_cnt = 0
     for course in colouring:
         print(f'{course}: Colour#{colouring[course]}')

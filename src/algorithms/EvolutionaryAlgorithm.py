@@ -36,8 +36,8 @@ class Chromosome:
 
 
 class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
-    def __init__(self, graph: Graph) -> None:
-        super().__init__(graph)
+    def __init__(self, graph: Graph, courses_map: dict) -> None:
+        super().__init__(graph, courses_map)
         self.generations_cnt = Constants.GENERATIONS_CNT
         self.population_cnt = Constants.POPULATION_CNT
         self.mutation_probability = Constants.MUTATION_PROBABILITY
