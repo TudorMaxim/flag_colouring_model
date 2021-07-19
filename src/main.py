@@ -75,7 +75,7 @@ if __name__ == '__main__':
     
     print(f'\nExecuting algorithm: {args.algorithm}\n')
 
-    colours_set = [i for i in range(1, 61)]
+    colours_set = [i for i in range(1, Constants.COLOURS_CNT + 1)]
     start_time = datetime.now()
     colouring = colouring_algorithm.run(colours_set)
     elapsed = datetime.now() - start_time

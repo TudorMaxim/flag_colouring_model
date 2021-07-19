@@ -9,10 +9,16 @@ from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
 
+# TODO: update and store this weights for each teacher
+# 2 - preferred time slot
+# 4 - indifferent
+# 8 - unpreferred time slot  
+weights = [0] + [8, 2, 2, 2, 2, 8, 2, 2, 4, 4, 4, 8] * 5
 
 class Chromosome:
-    def __init__(self, graph: Graph, genes: dict = None) -> None:
+    def __init__(self, graph: Graph, courses_map: dict, genes: dict = None) -> None:
         self.__graph = graph # needed to create correct mutations and offstring
+        self.__courses_map = courses_map # needed to get the teacher of a course
         self.__genes = genes
         if not genes:
             self.__genes = {}
@@ -20,9 +26,34 @@ class Chromosome:
     def get_colouring(self) -> dict:
         return self.__genes
 
+    def get_teacher_id(self, course: int):
+        return self.__courses_map[course].teacher_id
+
+    def get_used_colours(self) -> List:
+        used_colours = []
+        for course_id in self.__genes:
+            if self.__genes[course_id] not in used_colours:
+                used_colours.append(self.__genes[course_id])
+        return used_colours
+
+    # Fitness function based on weights for teacher preferences and penalties for incorrect solutions
+
+    def penalty(self) -> int:
+        # TODO: apply the other penalties (overcrowding, uniformity, etc)
+        penalty = 0
+        # Invalid colouring penalty
+        for course in self.__genes:
+            penalty += Constants.IVALID_COLOURING_PENALTY if not self.__graph.valid_colouring_for(course, self.__genes) else 0
+        return penalty
+
     def fitness(self) -> int:
-        # TODO: implement fitness function
-        return 0
+        score = 0
+        for course in self.__genes:
+            # TODO: get the weights of each teacher, not the predefined ones
+            score += weights[self.__genes[course]]
+
+        fitness = score / len(self.get_used_colours())
+        return fitness + self.penalty()
 
     def crossover(self, other):
         # TODO: implement crossover function
@@ -80,23 +111,42 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         for colouring in results:
             assert self._graph.valid_colouring(colour_map=colouring)
     
-        return list(map(lambda result: Chromosome(graph=self._graph, genes=result), results))
+        return list(map(lambda result: Chromosome(graph=self._graph, courses_map=self.courses_map, genes=result), results))
 
-    # Selection method: used to select 2 parents that will produce offspring
-    # The function returns parent1 and it's index alongside parent2 and it's index
+    def __roulette_wheel(self, population: List[Chromosome], chosen: List[bool]) -> Tuple[Chromosome, int]:
+        fitness_sum = int(sum(list(map(lambda chromosome: chromosome.fitness(), population))))
+        fixed_point = randint(0, fitness_sum)
+        idx = -1
+        partial_sum = 0
+        while partial_sum < fixed_point and idx < len(population):
+            idx += 1
+            partial_sum += population[idx].fitness() if not chosen[idx] else 0
+        return population[idx], idx
+    
+    # Roulette Wheel Selection
+    # The method selects 2 parents to produce offspring
+    # Returns 2 chromosome objects and their indices.
     def __selection(self, population: List[Chromosome]) -> Tuple[Chromosome, int, Chromosome, int]:
-        # TODO: implemant selection method (tournament, etc)
-        return (population[0], 0, population[1], 1)
+        chosen = [False for _ in population]
+        parent1, i = self.__roulette_wheel(population, chosen)
+        chosen[i] = True
+        parent2, j = self.__roulette_wheel(population, chosen)
+        return parent1, i, parent2, j
 
     def run(self, colours_set: List) -> dict:
         population = self.__generate_population(colours_set)
+       
         for generation in range(self.generations_cnt):
             print(f'Generation {generation}')
+
+            population = sorted(population, key=lambda chromosome: chromosome.fitness())
             print(f'Best fitness: {population[0].fitness()}\n')
+
             parent1, i, parent2, j = self.__selection(population)
             offspring1, offspring2 = parent1.crossover(parent2)
             offspring1.mutate(self.mutation_probability)
             offspring2.mutate(self.mutation_probability)
+
             # TODO: consider other ways of replacing parents with offsptring
             if offspring1.fitness() < parent1.fitness():
                 population[i] = offspring1
