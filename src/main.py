@@ -58,8 +58,8 @@ if __name__ == '__main__':
     courses = Course.build_ids_map(Course.from_json(args.dataset))
     conflict_graph = Conflicts.build_graph(students, teachers)
     
-    print("CONFLICT GRAPH:")
-    print(conflict_graph.adjacency_list)
+    # print("CONFLICT GRAPH:")
+    # print(conflict_graph.adjacency_list)
 
     options = {
         'ldo': LargestDegreeOrdering,
@@ -85,5 +85,5 @@ if __name__ == '__main__':
     for course in colouring:
         print(f'{course}: Colour#{colouring[course]}')
         used_colours_cnt = max(used_colours_cnt, colouring[course])
-    print(f'Used colours: {used_colours_cnt}')
+    # print(f'Used colours: {used_colours_cnt}')
     print(f'\n\nElapsed time: {elapsed.total_seconds() * 1000} ms')

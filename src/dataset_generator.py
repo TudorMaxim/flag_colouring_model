@@ -1,7 +1,9 @@
 import argparse
 import json
 from typing import List
-from random import randint, shuffle
+from random import choice, randint, shuffle
+
+from utils import Constants
 
 # Function that generates n entities based on a list of default names  
 def generate_entities(n: int, default_names: List[str]) -> List:
@@ -47,11 +49,28 @@ def assign_courses_to_teachers(teachers: List, c: int, t: int) -> List:
             teachers[idx]['course_ids'] = [course_ids[i]]
     return teachers
 
+# Function that finds the id of the teacher who is responsible with a course.
 def find_teacher_id(teachers: List, course_id: int) -> int:
     for teacher in teachers:
         if course_id in teacher['course_ids']:
             return teacher['id']
     raise ValueError(f'Error: Could not find a teacher for course with id {course_id}.') 
+
+
+# Function that randomly generates preferences for teachers.
+# 2 - preferred time slot
+# 4 - indifferent
+# 8 - unpreferred time slot
+def generate_weights(teachers: List) -> List:
+    options = [2, 4, 8]
+    for i in range(len(teachers)):
+        # The first element will always be 0 because colours start from 1
+        weights = [0] * (Constants.COLOURS_CNT + 1) 
+        for j in range(1, len(weights)):
+            weights[j] = choice(options)
+        teachers[i]['weights'] = weights
+    return teachers
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -107,6 +126,7 @@ if __name__ == '__main__':
     maxx = int(args.max_enrolment)
 
     teachers = assign_courses_to_teachers(teachers, c, t)
+    teachers = generate_weights(teachers)
     students = assign_courses_to_students(students, c, minn, maxx)
 
     for i in range(len(courses)):
