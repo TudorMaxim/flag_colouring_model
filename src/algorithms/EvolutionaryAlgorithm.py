@@ -78,6 +78,8 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         for i in range(len(population)):
             population[i].mutate(probability=100, colour_set=colours_set)
         
+        print(list(map(lambda ch: ch.fitness(), population)))
+
         return population
 
     def __roulette_wheel(self, population: List[Chromosome], chosen: List[bool]) -> Tuple[Chromosome, int]:
@@ -89,7 +91,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
             partial_sum += population[idx].fitness() if not chosen[idx] else 0
             idx += 1
         if idx == len(population):
-            return population[-1], -1
+            return population[-1], len(population) - 1
         return population[idx], idx
     
     # Roulette Wheel Selection

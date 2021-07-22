@@ -1,5 +1,6 @@
 import numpy as np
 from typing import List, Tuple
+from copy import deepcopy
 from random import randint
 from model.Course import Course
 from model.Graph import Graph
@@ -48,35 +49,48 @@ class Chromosome:
         return penalty
 
     # Fitness function based on weights for teacher preferences and penalties for incorrect solutions
-
     def fitness(self) -> int:
         score = 0
         for course in self.__genes:
             teacher_id = self.__courses_map[course].teacher_id
             weights = self.__teachers_map[teacher_id].weights
-            weighted_sum = sum(weights)
+            weighted_sum = 1 # sum(weights)
             score += weights[self.__genes[course]] / weighted_sum
 
         fitness = score * len(self.get_used_colours())
         return fitness + self.penalty()
 
-    # Two point crossover function
-    # change entire classes of colours
+    # One cut crossover function
+    # changes entire classes of colours
     def crossover(self, other) -> Tuple:
-        offspring1 = {}
-        offspring2 = {}
-        max_value = len(self.__genes.keys())
-        middle = max_value // 2
-        point1 = randint(1, middle)
-        point2 = randint(middle, max_value - 1)
+        parent1_colours = self.get_used_colours()
+        parent2_colours = other.get_used_colours()
 
-        for i in self.__genes.keys():
-            offspring1[i] = self.__genes[i]
-            offspring2[i] = other.get_colouring()[i]
+        cut_point = randint(1, min(len(parent1_colours), len(parent2_colours)) - 1)
 
-        for i in range(point1 + 1, point2):
-            offspring1[i] = other.get_colouring()[i]
-            offspring2[i] = self.__genes[i]
+        offspring1_colours  = deepcopy(parent1_colours)
+        offspring2_colours = deepcopy(parent2_colours)
+
+        for i in range(cut_point, min(len(offspring1_colours), len(parent2_colours))):
+            offspring1_colours[i] = parent2_colours[i]
+        
+        for i in range(cut_point, min(len(offspring2_colours), len(parent1_colours))):
+            offspring2_colours[i] = parent1_colours[i]
+
+        offspring1 = deepcopy(self.__genes)
+        offspring2 = deepcopy(other.get_colouring())
+
+        for new_colour in offspring1_colours:
+            for course in offspring1:
+                old_colour = offspring1[course] 
+                if old_colour not in offspring1_colours: # old colour from parent 1
+                    offspring1[course] = new_colour
+        
+        for new_colour in offspring2_colours:
+            for course in offspring2:
+                old_colour = offspring2[course]
+                if old_colour not in offspring2_colours:  # old colour from parent 2
+                    offspring2[course] = new_colour
 
         offspring1 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring1)
         offspring2 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring2)
