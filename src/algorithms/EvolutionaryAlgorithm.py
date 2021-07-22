@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from typing import List, Tuple
-from time import sleep
 from random import randint, shuffle
 from threading import Thread
 from model.Course import Course
@@ -74,11 +74,23 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
             genes=result
         ), results))
 
-        # Mutate half of the population to obtain more diversity
-        for i in range(len(population)):
-            population[i].mutate(probability=100, colour_set=colours_set)
+        # Mutate the population to obtain more diversity
+        for i in range(3, len(population)):
+            if i % 2:
+                population[i].colour_class_mutation(probability=100, colour_set=colours_set)
+            else:
+                extra_colours = randint(1, Constants.COLOURS_CNT)
+                for _ in range(extra_colours):
+                    population[i].single_colour_mutation(probability=100, colour_set=colours_set)
         
-        print(list(map(lambda ch: ch.fitness(), population)))
+        fitnesses = list(map(lambda ch: ch.fitness(), population))
+        print('Population Fitnesses:')
+        print(fitnesses)
+        unique = np.unique(np.array(fitnesses))
+        print('\nUnique fitnesses:')
+        print(unique)
+        diversity = len(unique) / len(fitnesses)
+        print(f'Population diversity ratio: {diversity}\n')
 
         return population
 
@@ -113,8 +125,10 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         for generation in range(self.generations_cnt):
             parent1, i, parent2, j = self.__selection(population)
             offspring1, offspring2 = parent1.crossover(parent2)
-            offspring1.mutate(self.mutation_probability, colours_set)
-            offspring2.mutate(self.mutation_probability, colours_set)
+            offspring1.colour_class_mutation(self.mutation_probability, colours_set)
+            offspring2.colour_class_mutation(self.mutation_probability, colours_set)
+            offspring1.single_colour_mutation(self.mutation_probability, colours_set)
+            offspring2.single_colour_mutation(self.mutation_probability, colours_set)
 
             # Keep only the best 2 solutions in the population
             options = sorted(
@@ -129,7 +143,6 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
             
             print(f'Generation {generation}')
             print(f'Best fitness: {best.fitness()}\n')
-            sleep(0.3)
         
         plt.plot(x_axis, y_axis)
         plt.xlabel('Generation')

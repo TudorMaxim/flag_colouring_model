@@ -87,9 +87,9 @@ if __name__ == '__main__':
     elapsed = datetime.now() - start_time
 
     print("TIMETABLE:")
-    used_colours_cnt = 0
     for course in colouring:
         print(f'{course}: Colour#{colouring[course]}')
-        used_colours_cnt = max(used_colours_cnt, colouring[course])
-    # print(f'Used colours: {used_colours_cnt}')
+
+    print(f'Used colours: {Helpers.get_used_colours_count(colouring)}')
+
     print(f'\n\nElapsed time: {elapsed.total_seconds() * 1000} ms')
