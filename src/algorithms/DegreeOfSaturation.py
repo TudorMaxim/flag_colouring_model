@@ -1,11 +1,20 @@
 from typing import List
+from model.Course import Course
 from model.Graph import Graph
 from algorithms.AbstractColouringAlgorithm import AbstractColouringAlgorithm
+from model.Student import Student
+from model.Teacher import Teacher
 
 
 class DegreeOfSaturation(AbstractColouringAlgorithm):
-    def __init__(self, graph: Graph, courses_map: dict = None) -> None:
-        super().__init__(graph, courses_map)
+    def __init__(
+        self,
+        graph: Graph,
+        students_map: dict[int, Student] = None,
+        teachers_map: dict[int, Teacher] = None,
+        courses_map: dict[int, Course] = None
+    ) -> None:
+        super().__init__(graph, students_map, teachers_map, courses_map)
 
     def saturation_degree(self, course: int, colour_map: dict) -> int:
         used_colours = []

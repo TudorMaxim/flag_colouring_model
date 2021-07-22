@@ -9,6 +9,7 @@ from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
 from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
 from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
+from utils.Helpers import Helpers
 
 
 def setup_parser() -> ArgumentParser:
@@ -53,10 +54,10 @@ if __name__ == '__main__':
 
     print(f'\nParsing dataset {args.dataset}\n')
 
-    students = Student.from_json(args.dataset)
-    teachers = Teacher.from_json(args.dataset)
-    courses = Course.build_ids_map(Course.from_json(args.dataset))
-    conflict_graph = Conflicts.build_graph(students, teachers)
+    students = Helpers.build_ids_map(Student.from_json(args.dataset))
+    teachers = Helpers.build_ids_map(Teacher.from_json(args.dataset))
+    courses = Helpers.build_ids_map(Course.from_json(args.dataset))
+    conflict_graph = Conflicts.build_graph(list(students.values()), list(teachers.values()))
     
     # print("CONFLICT GRAPH:")
     # print(conflict_graph.adjacency_list)
@@ -67,7 +68,12 @@ if __name__ == '__main__':
         'rlf': RecursiveLargestFirst,
         'ea': EvolutionaryAlgorithm
     }
-    colouring_algorithm = options.get(args.algorithm)(graph=conflict_graph, courses_map=courses)
+    colouring_algorithm = options.get(args.algorithm)(
+        graph=conflict_graph,
+        students_map=students,
+        teachers_map=teachers,
+        courses_map=courses
+    )
     if isinstance(colouring_algorithm, EvolutionaryAlgorithm):
         colouring_algorithm.generations_cnt = int(args.generations)
         colouring_algorithm.population_cnt = int(args.population)

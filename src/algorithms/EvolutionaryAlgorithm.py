@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
 from typing import List, Tuple
 from time import sleep
-from random import choice, randint, shuffle
+from random import randint, shuffle
 from threading import Thread
+from model.Course import Course
 from model.Graph import Graph
 from model.Chromosome import Chromosome
+from model.Student import Student
+from model.Teacher import Teacher
 from utils import Constants
 from algorithms.AbstractColouringAlgorithm import AbstractColouringAlgorithm
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
@@ -13,8 +16,14 @@ from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
 
 
 class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
-    def __init__(self, graph: Graph, courses_map: dict) -> None:
-        super().__init__(graph, courses_map)
+    def __init__(
+        self,
+        graph: Graph,
+        students_map: dict[int, Student] = None,
+        teachers_map: dict[int, Teacher] = None,
+        courses_map: dict[int, Course] = None
+    ) -> None:
+        super().__init__(graph, students_map, teachers_map, courses_map)
         self.generations_cnt = Constants.GENERATIONS_CNT
         self.population_cnt = Constants.POPULATION_CNT
         self.mutation_probability = Constants.MUTATION_PROBABILITY
@@ -24,6 +33,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
 
     # only valid solutions
     # Try: replace entire pop
+    # Function that generates a population of valid solutions
     def __generate_population(self, colours_set: List) -> List[Chromosome]:
         heuristics = [
             LargestDegreeOrdering(self._graph),
@@ -48,22 +58,27 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         for i in range(3):
             threads[i].join()
         
-        # for i in range(3, self.population_cnt): 
-        #     shuffle(colours_set)
-        #     for vertex in self._graph.get_vertices():
-        #         idx = randint(0, 2)
-        #         old_colour = results[idx][vertex]
-        #         position = positions[idx][old_colour]
-        #         results[i][vertex] = colours_set[position]
-
-        for i in range(3, self.population_cnt):
+        for i in range(3, self.population_cnt): 
+            shuffle(colours_set)
             for vertex in self._graph.get_vertices():
-                results[i][vertex] = choice(colours_set)
-        
-        # c1 = list(map(lambda result: result[1], results))
-        # print(c1)
+                idx = randint(0, 2)
+                old_colour = results[idx][vertex]
+                position = positions[idx][old_colour]
+                results[i][vertex] = colours_set[position]
 
-        return list(map(lambda result: Chromosome(graph=self._graph, courses_map=self.courses_map, genes=result), results))
+        population = list(map(lambda result: Chromosome(
+            graph=self._graph,
+            students_map=self.students_map,
+            teachers_map=self.teachers_map,
+            courses_map=self.courses_map,
+            genes=result
+        ), results))
+
+        # Mutate half of the population to obtain more diversity
+        for i in range(len(population)):
+            population[i].mutate(probability=100, colour_set=colours_set)
+        
+        return population
 
     def __roulette_wheel(self, population: List[Chromosome], chosen: List[bool]) -> Tuple[Chromosome, int]:
         fitness_sum = int(sum(list(map(lambda chromosome: chromosome.fitness(), population))))

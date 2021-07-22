@@ -1,21 +1,25 @@
 import numpy as np
 from typing import List, Tuple
 from random import randint
+from model.Course import Course
 from model.Graph import Graph
+from model.Student import Student
+from model.Teacher import Teacher
 from utils import Constants
 
 
-# TODO: update and store this weights for each teacher
-# 2 - preferred time slot
-# 4 - indifferent
-# 8 - unpreferred time slot
-weights = [0] + [8, 2, 2, 2, 2, 8, 2, 2, 4, 4, 4, 8] * 5
-
-
 class Chromosome:
-    def __init__(self, graph: Graph, courses_map: dict, genes: dict = None) -> None:
+    def __init__(
+        self, graph: Graph,
+        students_map: dict[int, Student],
+        teachers_map: dict[int, Teacher],
+        courses_map: dict[int, Course],
+        genes: dict[int, int] = None
+    ) -> None:
         self.__graph = graph  # needed to create correct mutations and offstring
-        self.__courses_map = courses_map  # needed to get the teacher of a course
+        self.__courses_map = courses_map  # needed to get the teacher id of a course
+        self.__teachers_map = teachers_map # needed to get the preferences of a teacher
+        self.__students_map = students_map # needed to compute penalties based on students' timetable
         self.__genes = genes
         if not genes:
             self.__genes = {}
@@ -40,16 +44,20 @@ class Chromosome:
         for course in self.__genes:
             penalty += Constants.IVALID_COLOURING_PENALTY if not self.__graph.valid_colouring_for(
                 course, self.__genes) else 0
+        # Overcrowding penalty - applied if a student/teacher has more than 6 courses in a day 
         return penalty
 
     # Fitness function based on weights for teacher preferences and penalties for incorrect solutions
+
     def fitness(self) -> int:
         score = 0
         for course in self.__genes:
-            # TODO: get the weights of each teacher, not the predefined ones
-            score += weights[self.__genes[course]]
+            teacher_id = self.__courses_map[course].teacher_id
+            weights = self.__teachers_map[teacher_id].weights
+            weighted_sum = sum(weights)
+            score += weights[self.__genes[course]] / weighted_sum
 
-        fitness = score / len(self.get_used_colours()) # devided by total weights
+        fitness = score * len(self.get_used_colours())
         return fitness + self.penalty()
 
     # Two point crossover function
@@ -70,8 +78,8 @@ class Chromosome:
             offspring1[i] = other.get_colouring()[i]
             offspring2[i] = self.__genes[i]
 
-        offspring1 = Chromosome(self.__graph, self.__courses_map, offspring1)
-        offspring2 = Chromosome(self.__graph, self.__courses_map, offspring2)
+        offspring1 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring1)
+        offspring2 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring2)
         print(f'Offspring fitnesses: {offspring1.fitness()}, {offspring2.fitness()}')
         return offspring1, offspring2
 
