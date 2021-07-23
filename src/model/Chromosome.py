@@ -166,3 +166,21 @@ class Chromosome:
             return
         new_colour = choice(unused_colours)
         self.__genes[course_id] = new_colour
+
+    # Mutation function that selects an used colour and keeps only half of the nodes coloured as before.
+    # The other half is re-coloured using an unused colour 
+    def colour_class_split_mutation(self, probability: int, colour_set: List[int]) -> None:
+        p = randint(0, 100)
+        if p > probability:
+            return
+        colours = Helpers.get_used_colours(self.__genes)
+        idx = randint(0, len(colours) - 1)
+        old_colour = colours[idx]
+        unused_colours = np.setdiff1d(np.array(colour_set), np.array(colours))
+        idx = randint(0, len(unused_colours) - 1)
+        new_colour = unused_colours[idx]
+        cnt = 0
+        for course in self.__genes:
+            if self.__genes[course] == old_colour and cnt % 2 == 0:
+                self.__genes[course] = new_colour
+            cnt += 1

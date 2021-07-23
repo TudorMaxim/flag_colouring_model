@@ -76,8 +76,10 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
 
         # Mutate the population to obtain more diversity
         for i in range(3, len(population)):
-            if i % 2:
+            if i % 3 == 0:
                 population[i].colour_class_mutation(probability=100, colour_set=colours_set)
+            elif i % 3 == 1:
+                population[i].colour_class_split_mutation(probability=100, colour_set=colours_set)
             else:
                 extra_colours = randint(1, Constants.COLOURS_CNT)
                 for _ in range(extra_colours):
