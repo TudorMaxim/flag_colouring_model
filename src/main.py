@@ -73,9 +73,6 @@ if __name__ == '__main__':
     courses = Helpers.build_ids_map(Course.from_json(args.dataset))
     conflict_graph = Conflicts.build_graph(list(students.values()), list(teachers.values()))
     
-    # print("CONFLICT GRAPH:")
-    # print(conflict_graph.adjacency_list)
-
     options = {
         'ldo': LargestDegreeOrdering,
         'dsatur': DegreeOfSaturation,
@@ -92,19 +89,18 @@ if __name__ == '__main__':
         colouring_algorithm.generations_cnt = int(args.generations)
         colouring_algorithm.population_cnt = int(args.population)
         colouring_algorithm.mutation_probability = int(args.mutation)
-        colouring_algorithm.population_model = args.model
-        colouring_algorithm.selection_method = args.selection
+        colouring_algorithm.population_model = EvolutionaryAlgorithmConfig(args.model)
+        colouring_algorithm.selection_method = EvolutionaryAlgorithmConfig(args.selection)
     
     print(f'\nExecuting algorithm: {args.algorithm}\n')
 
-    colours_set = [i for i in range(1, Constants.COLOURS_CNT + 1)]
+    colours_set = Helpers.generate_colour_set(teachers.values())
+
     start_time = datetime.now()
     colouring = colouring_algorithm.run(colours_set)
     elapsed = datetime.now() - start_time
 
-    print("TIMETABLE:")
-    for course in colouring:
-        print(f'{course}: Colour#{colouring[course]}')
+    Helpers.print_timetable(courses, colouring)
 
     print(f'Used colours: {Helpers.get_used_colours_count(colouring)}')
 

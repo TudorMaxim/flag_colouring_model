@@ -2,7 +2,6 @@ import argparse
 import json
 from typing import List
 from random import choice, randint, shuffle
-
 from utils import Constants
 
 # Function that generates n entities based on a list of default names  

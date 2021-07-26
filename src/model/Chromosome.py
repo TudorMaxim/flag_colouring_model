@@ -1,6 +1,5 @@
 import numpy as np
 from typing import List, Tuple
-from copy import deepcopy
 from random import choice, randint
 from model.Course import Course
 from model.Graph import Graph
@@ -40,7 +39,7 @@ class Chromosome:
         frequency = [0] * 5
         for course in person.course_ids:
             colour = self.__genes[course]
-            day = (colour - 1) % 5
+            day = (colour - 1) // 12
             frequency[day] += 1
         for f in frequency:
                 penalty += Constants.OVERCROWDING_PENALTY if f > Constants.MAX_COURSES_PER_DAY else 0
@@ -53,7 +52,7 @@ class Chromosome:
         timetable = []
         for course in teacher.course_ids:
             colour = self.__genes[course]
-            day = (colour - 1) % 5
+            day = (colour - 1) // 12
             timetable.append((colour, day))
         timetable = sorted(timetable)
         for i in range(1, len(timetable)):
@@ -68,7 +67,7 @@ class Chromosome:
         classes = [0] * 5
         for course in person.course_ids:
             colour = self.__genes[course]
-            day = (colour - 1) % 5
+            day = (colour - 1) // 12
             classes[day] += 1
         shortest_day = min(classes)
         longest_day = max(classes)
@@ -97,13 +96,12 @@ class Chromosome:
         for course in self.__genes:
             teacher_id = self.__courses_map[course].teacher_id
             weights = self.__teachers_map[teacher_id].weights
-            weighted_sum = 1 # sum(weights)
-            score += weights[self.__genes[course]] / weighted_sum
+            score += weights[self.__genes[course]]
 
         fitness = score * Helpers.get_used_colours_count(self.__genes)
         return fitness + self.penalty()
 
-    # One cut crossover function which changes entire classes of colours
+    # Permutation One Point Crossover function
     def crossover(self, other) -> Tuple:
         parent1 = list(map(lambda item: item[1], sorted(self.__genes.items(), key=lambda item: item[0])))
         parent2 = list(map(lambda item: item[1], sorted(other.get_colouring().items(), key=lambda item: item[0])))

@@ -16,9 +16,3 @@ class Course:
         data = json.load(f)
         return [Course(course['id'], course['name'], course['teacher_id']) for course in data['courses']]
     
-    @staticmethod
-    def build_ids_map(courses):
-        ids_map = {}
-        for course in courses:
-            ids_map[course.id] = course
-        return ids_map
