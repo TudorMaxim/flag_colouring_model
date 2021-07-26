@@ -105,38 +105,28 @@ class Chromosome:
 
     # One cut crossover function which changes entire classes of colours
     def crossover(self, other) -> Tuple:
-        parent1_colours = Helpers.get_used_colours(self.__genes)
-        parent2_colours = Helpers.get_used_colours(other.get_colouring())
-
-        cut_point = randint(1, min(len(parent1_colours), len(parent2_colours)) - 1)
-
-        offspring1_colours  = deepcopy(parent1_colours)
-        offspring2_colours = deepcopy(parent2_colours)
-
-        for i in range(cut_point, min(len(offspring1_colours), len(parent2_colours))):
-            offspring1_colours[i] = parent2_colours[i]
+        parent1 = list(map(lambda item: item[1], sorted(self.__genes.items(), key=lambda item: item[0])))
+        parent2 = list(map(lambda item: item[1], sorted(other.get_colouring().items(), key=lambda item: item[0])))
+        assert(len(parent1) == len(parent2))
         
-        for i in range(cut_point, min(len(offspring2_colours), len(parent1_colours))):
-            offspring2_colours[i] = parent1_colours[i]
+        courses_cnt = len(parent1)
+        cut_point = randint(1, courses_cnt - 1)
+        offspring1_colours = [0] * courses_cnt
+        offspring1_colours[:cut_point] = parent1[:cut_point]
+        offspring1_colours[cut_point:] = parent2[cut_point:]
+        offspring2_colours = [0] * courses_cnt
+        offspring2_colours[:cut_point] = parent2[:cut_point]
+        offspring2_colours[cut_point:] = parent1[cut_point:]
 
-        offspring1 = deepcopy(self.__genes)
-        offspring2 = deepcopy(other.get_colouring())
-
-        for new_colour in offspring1_colours:
-            for course in offspring1:
-                old_colour = offspring1[course] 
-                if old_colour not in offspring1_colours: # old colour from parent 1
-                    offspring1[course] = new_colour
+        offspring1 = {}
+        offspring2 = {}
+        for i in range(len(offspring1_colours)):
+            offspring1[i + 1] = offspring1_colours[i]
+        for i in range(len(offspring2_colours)):
+            offspring2[i + 1] = offspring2_colours[i]
         
-        for new_colour in offspring2_colours:
-            for course in offspring2:
-                old_colour = offspring2[course]
-                if old_colour not in offspring2_colours:  # old colour from parent 2
-                    offspring2[course] = new_colour
-
         offspring1 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring1)
         offspring2 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring2)
-        print(f'Offspring fitnesses: {offspring1.fitness()}, {offspring2.fitness()}')
         return offspring1, offspring2
 
     # Mutation function that randomly changes an entire colour class
@@ -148,6 +138,8 @@ class Chromosome:
         idx = randint(0, len(colours) - 1)
         old_colour = colours[idx]
         unused_colours = np.setdiff1d(np.array(colour_set), np.array(colours))
+        if not len(unused_colours):
+            return 
         idx = randint(0, len(unused_colours) - 1)
         new_colour = unused_colours[idx]
         for course in self.__genes:
@@ -177,6 +169,8 @@ class Chromosome:
         idx = randint(0, len(colours) - 1)
         old_colour = colours[idx]
         unused_colours = np.setdiff1d(np.array(colour_set), np.array(colours))
+        if not len(unused_colours):
+            return
         idx = randint(0, len(unused_colours) - 1)
         new_colour = unused_colours[idx]
         cnt = 0

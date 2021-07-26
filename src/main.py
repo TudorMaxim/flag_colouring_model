@@ -8,7 +8,7 @@ from utils.Conflicts import Conflicts
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
 from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
-from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
+from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
 from utils.Helpers import Helpers
 
 
@@ -45,6 +45,20 @@ def setup_parser() -> ArgumentParser:
         default=Constants.MUTATION_PROBABILITY,
         help='The mutation probability when using the evolutionary algorithm. In case of heuristics, this argument is ignored.'
     )
+    parser.add_argument(
+        '--model',
+        '-M',
+        default='steady_state',
+        choices=['steady_state', 'generational'],
+        help='Population model to be used fot the evolutionary algorithm'
+    )
+    parser.add_argument(
+        '--selection',
+        '-s',
+        default='roulette_wheel',
+        choices=['roulette_wheel', 'tournament'],
+        help='Selection method to be used for the evolutionary algorithm'
+    )
     return parser
 
 
@@ -78,6 +92,8 @@ if __name__ == '__main__':
         colouring_algorithm.generations_cnt = int(args.generations)
         colouring_algorithm.population_cnt = int(args.population)
         colouring_algorithm.mutation_probability = int(args.mutation)
+        colouring_algorithm.population_model = args.model
+        colouring_algorithm.selection_method = args.selection
     
     print(f'\nExecuting algorithm: {args.algorithm}\n')
 
