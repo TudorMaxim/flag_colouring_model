@@ -1,13 +1,22 @@
 from typing import List
+from model.Course import Course
 from model.Graph import Graph
 from algorithms.AbstractColouringAlgorithm import AbstractColouringAlgorithm
+from model.Student import Student
+from model.Teacher import Teacher
 
 
 class DegreeOfSaturation(AbstractColouringAlgorithm):
-    def __init__(self, graph: Graph) -> None:
-        super().__init__(graph)
+    def __init__(
+        self,
+        graph: Graph,
+        students_map: dict[int, Student] = None,
+        teachers_map: dict[int, Teacher] = None,
+        courses_map: dict[int, Course] = None
+    ) -> None:
+        super().__init__(graph, students_map, teachers_map, courses_map)
 
-    def saturation_degree(self, course: int, colour_map: dict) -> int:
+    def __saturation_degree(self, course: int, colour_map: dict) -> int:
         used_colours = []
         for vertex in self._graph.get_neighbours(course):
             if colour_map[vertex] and colour_map[vertex] not in used_colours:
@@ -15,7 +24,7 @@ class DegreeOfSaturation(AbstractColouringAlgorithm):
         return len(used_colours)
 
 
-    def uncoloured_neighbours_count(self, course: int, colour_map: dict) -> int:
+    def __uncoloured_neighbours_count(self, course: int, colour_map: dict) -> int:
         degree = 0
         for vertex in self._graph.get_neighbours(course):
             degree += 1 if colour_map[vertex] == 0 else 0
@@ -45,8 +54,8 @@ class DegreeOfSaturation(AbstractColouringAlgorithm):
             queue = sorted(
                 queue,
                 key=lambda course: (
-                    self.saturation_degree(course, colours_map),
-                    self.uncoloured_neighbours_count(course, colours_map)
+                    self.__saturation_degree(course, colours_map),
+                    self.__uncoloured_neighbours_count(course, colours_map)
                 ),
                 reverse=True
             )

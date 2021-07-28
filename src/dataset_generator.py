@@ -1,7 +1,8 @@
 import argparse
 import json
 from typing import List
-from random import randint, shuffle
+from random import choice, randint, shuffle
+from utils import Constants
 
 # Function that generates n entities based on a list of default names  
 def generate_entities(n: int, default_names: List[str]) -> List:
@@ -21,6 +22,7 @@ def generate_entities(n: int, default_names: List[str]) -> List:
 # Function that randomly assings courses to students
 # A student may have many courses and a course may have many students
 def assign_courses_to_students(students: List, c: int, minn: int, maxx: int) -> List:
+    print('Assigning courses to students:')
     course_ids = [i + 1 for i in range(c)]
     assignments = []
     for student in students:
@@ -31,12 +33,14 @@ def assign_courses_to_students(students: List, c: int, minn: int, maxx: int) -> 
             'name': student['name'],
             'course_ids': course_ids[0:cnt]
         })
+    print('Done!\n')
     return assignments
 
 
 # Function that randomly assigns courses to teachers
 # A teacher can have multiple courses, but a course can be held only by one teacher
 def assign_courses_to_teachers(teachers: List, c: int, t: int) -> List:
+    print('Assigning courses to teachers:')
     course_ids = [i + 1 for i in range(c)]
     shuffle(course_ids)
     for i in range(c):
@@ -45,6 +49,31 @@ def assign_courses_to_teachers(teachers: List, c: int, t: int) -> List:
             teachers[idx]['course_ids'].append(course_ids[i])
         else:
             teachers[idx]['course_ids'] = [course_ids[i]]
+    print('Done!\n')
+    return teachers
+
+# Function that finds the id of the teacher who is responsible with a course.
+def find_teacher_id(teachers: List, course_id: int) -> int:
+    for teacher in teachers:
+        if course_id in teacher['course_ids']:
+            return teacher['id']
+    raise ValueError(f'Error: Could not find a teacher for course with id {course_id}.') 
+
+
+# Function that randomly generates preferences for teachers.
+# 2 - preferred time slot
+# 4 - indifferent
+# 8 - unpreferred time slot
+def generate_weights(teachers: List) -> List:
+    print('Generating weights for teachers:')
+    options = [2, 4, 8]
+    for i in range(len(teachers)):
+        # The first element will always be 0 because colours start from 1
+        weights = [0] * (Constants.COLOURS_CNT + 1) 
+        for j in range(1, len(weights)):
+            weights[j] = choice(options)
+        teachers[i]['weights'] = weights
+    print('Done!\n')
     return teachers
 
 
@@ -74,6 +103,7 @@ if __name__ == '__main__':
     print(f'* {t} teachers')
     print(f'* {r} rooms')
 
+    print('Generating entities:')
     courses = generate_entities(c, default_names=[
         'Big Data Technologies',
         'Model Driven Development',
@@ -97,13 +127,21 @@ if __name__ == '__main__':
         'Mark Smith'
     ])
     rooms = [{'id': id, 'name': f'Room#{id}'} for id in range(1, r + 1)]
-
+    print('Done!\n')
     minn = int(args.min_enrolment)
     maxx = int(args.max_enrolment)
+
+    teachers = assign_courses_to_teachers(teachers, c, t)
+    teachers = generate_weights(teachers)
+    students = assign_courses_to_students(students, c, minn, maxx)
+
+    for i in range(len(courses)):
+        courses[i]['teacher_id'] = find_teacher_id(teachers, courses[i]['id'])
+    
     dataset = {
         'courses': courses,
-        'teachers': assign_courses_to_teachers(teachers, c, t),
-        'students': assign_courses_to_students(students, c, minn, maxx),
+        'teachers': teachers,
+        'students': students,
         'rooms': rooms
     }
 

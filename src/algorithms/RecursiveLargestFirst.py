@@ -1,12 +1,21 @@
 import numpy as np
 from typing import List
+from model.Course import Course
 from model.Graph import Graph
 from algorithms.AbstractColouringAlgorithm import AbstractColouringAlgorithm
+from model.Student import Student
+from model.Teacher import Teacher
 
 
 class RecursiveLargestFirst(AbstractColouringAlgorithm):
-    def __init__(self, graph: Graph) -> None:
-        super().__init__(graph)
+    def __init__(
+        self,
+        graph: Graph,
+        students_map: dict[int, Student] = None,
+        teachers_map: dict[int, Teacher] = None,
+        courses_map: dict[int, Course] = None
+    ) -> None:
+        super().__init__(graph, students_map, teachers_map, courses_map)
 
     def __get_common_neighbours(self, v: int, vertices_set: List) -> List:
         neighbours = self._graph.get_neighbours(v)

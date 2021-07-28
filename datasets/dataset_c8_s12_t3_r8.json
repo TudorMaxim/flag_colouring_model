@@ -2,61 +2,258 @@
     "courses": [
         {
             "id": 1,
-            "name": "Distributed Ledgers#1"
+            "name": "Artificial Intelligence#1",
+            "teacher_id": 1
         },
         {
             "id": 2,
-            "name": "Model Driven Development#1"
+            "name": "Big Data Technologies#1",
+            "teacher_id": 2
         },
         {
             "id": 3,
-            "name": "Software Engineering#1"
+            "name": "Security Management#1",
+            "teacher_id": 1
         },
         {
             "id": 4,
-            "name": "Software Testing#1"
+            "name": "Distributed Ledgers#1",
+            "teacher_id": 3
         },
         {
             "id": 5,
-            "name": "Security Management#1"
+            "name": "Security Engineering#1",
+            "teacher_id": 3
         },
         {
             "id": 6,
-            "name": "Software Engineering#2"
+            "name": "Model Driven Development#1",
+            "teacher_id": 2
         },
         {
             "id": 7,
-            "name": "Software Testing#2"
+            "name": "Security Engineering#2",
+            "teacher_id": 2
         },
         {
             "id": 8,
-            "name": "Software Testing#3"
+            "name": "Model Driven Development#2",
+            "teacher_id": 1
         }
     ],
     "teachers": [
         {
             "id": 1,
-            "name": "Jon Smith#1",
+            "name": "Mark Smith#1",
             "course_ids": [
-                5,
-                7,
+                1,
+                8,
                 3
+            ],
+            "weights": [
+                0,
+                8,
+                4,
+                8,
+                4,
+                4,
+                4,
+                2,
+                2,
+                4,
+                2,
+                2,
+                4,
+                4,
+                2,
+                8,
+                4,
+                8,
+                4,
+                8,
+                2,
+                2,
+                2,
+                2,
+                8,
+                4,
+                2,
+                4,
+                4,
+                2,
+                4,
+                8,
+                8,
+                2,
+                8,
+                8,
+                8,
+                4,
+                8,
+                8,
+                8,
+                8,
+                2,
+                2,
+                4,
+                8,
+                8,
+                8,
+                4,
+                4,
+                4,
+                2,
+                4,
+                8,
+                4,
+                4,
+                8,
+                8,
+                8,
+                2,
+                4
             ]
         },
         {
             "id": 2,
-            "name": "Jane Smith#1",
+            "name": "Jon Smith#1",
             "course_ids": [
-                1,
                 6,
+                2,
+                7
+            ],
+            "weights": [
+                0,
+                2,
+                2,
+                2,
+                2,
+                2,
+                8,
+                2,
+                2,
+                2,
+                2,
+                4,
+                8,
+                2,
+                8,
+                2,
+                8,
+                4,
+                4,
+                2,
+                2,
+                2,
+                8,
+                2,
+                4,
+                4,
+                8,
+                4,
+                2,
+                8,
+                2,
+                4,
+                4,
+                8,
+                4,
+                4,
+                2,
+                4,
+                4,
+                8,
+                8,
+                8,
+                2,
+                2,
+                2,
+                2,
+                4,
+                2,
+                2,
+                4,
+                8,
+                2,
+                2,
+                4,
+                4,
+                4,
+                8,
+                4,
+                2,
+                8,
                 2
             ]
         },
         {
             "id": 3,
-            "name": "Jon Smith#2",
+            "name": "Mark Smith#2",
             "course_ids": [
                 4,
+                5
+            ],
+            "weights": [
+                0,
+                8,
+                4,
+                4,
+                4,
+                8,
+                4,
+                8,
+                2,
+                2,
+                4,
+                8,
+                8,
+                2,
+                2,
+                8,
+                8,
+                2,
+                8,
+                8,
+                2,
+                2,
+                4,
+                8,
+                4,
+                8,
+                8,
+                4,
+                4,
+                4,
+                4,
+                8,
+                4,
+                2,
+                4,
+                8,
+                4,
+                4,
+                2,
+                4,
+                4,
+                4,
+                4,
+                4,
+                4,
+                2,
+                2,
+                4,
+                8,
+                8,
+                2,
+                2,
+                8,
+                2,
+                8,
+                4,
+                2,
+                8,
+                2,
+                8,
                 8
             ]
         }
@@ -64,11 +261,8 @@
     "students": [
         {
             "id": 1,
-            "name": "Mary Doe#1",
+            "name": "Mark Doe#1",
             "course_ids": [
-                7,
-                2,
-                3,
                 6
             ]
         },
@@ -76,101 +270,97 @@
             "id": 2,
             "name": "Jane Doe#1",
             "course_ids": [
-                2
+                5,
+                3
             ]
         },
         {
             "id": 3,
-            "name": "Jon Doe#1",
+            "name": "Mary Doe#1",
             "course_ids": [
-                2,
-                8,
-                1
+                3,
+                8
             ]
         },
         {
             "id": 4,
-            "name": "Jon Doe#2",
+            "name": "Jane Doe#2",
             "course_ids": [
-                1,
-                3,
                 7,
-                2
+                4,
+                8,
+                2,
+                3
             ]
         },
         {
             "id": 5,
-            "name": "Jane Doe#2",
+            "name": "Jane Doe#3",
             "course_ids": [
-                8,
-                7,
-                4,
-                1,
-                2
+                5
             ]
         },
         {
             "id": 6,
-            "name": "Mary Doe#2",
+            "name": "Mark Doe#2",
             "course_ids": [
-                4,
-                5,
                 1,
-                6,
-                7
-            ]
-        },
-        {
-            "id": 7,
-            "name": "Mark Doe#1",
-            "course_ids": [
-                3,
-                7,
-                1,
-                4,
                 6
             ]
         },
         {
-            "id": 8,
+            "id": 7,
             "name": "Tudor Maxim#1",
+            "course_ids": [
+                4,
+                2,
+                1,
+                3
+            ]
+        },
+        {
+            "id": 8,
+            "name": "Jon Doe#1",
+            "course_ids": [
+                8,
+                7
+            ]
+        },
+        {
+            "id": 9,
+            "name": "Jane Doe#4",
             "course_ids": [
                 4
             ]
         },
         {
-            "id": 9,
-            "name": "Tudor Maxim#2",
-            "course_ids": [
-                3
-            ]
-        },
-        {
             "id": 10,
-            "name": "Tudor Maxim#3",
+            "name": "Jon Doe#2",
             "course_ids": [
-                7,
-                3,
+                8,
+                6,
                 5,
-                8
+                4,
+                7
             ]
         },
         {
             "id": 11,
-            "name": "Mary Doe#3",
+            "name": "Jon Doe#3",
             "course_ids": [
-                1,
-                8,
-                6,
                 2,
-                5
+                1,
+                7
             ]
         },
         {
             "id": 12,
-            "name": "Mary Doe#4",
+            "name": "Mary Doe#2",
             "course_ids": [
-                3
+                6,
+                7,
+                3,
+                5
             ]
         }
     ],

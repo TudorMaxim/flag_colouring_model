@@ -1,0 +1,10 @@
+POPULATION_CNT = 100
+GENERATIONS_CNT = 100
+MUTATION_PROBABILITY = 60
+COLOURS_CNT = 60
+MAX_COURSES_PER_DAY = 6
+MAX_DAILY_BREAK = 2 # hours
+IVALID_COLOURING_PENALTY = 2 ** 10 # applied if a colour is invalid
+OVERCROWDING_PENALTY = 2 ** 6 # applied if a student/teacher has more than 6 courses a day
+FRAGMENTATION_PENALTY = 2 ** 5 # applied for each break longer than 2 hours for a teacher
+UNIFORMITY_PENALTY = 2 ** 4 # multiplied with the difference between the longest and shortest day of a teacher
