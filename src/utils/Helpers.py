@@ -26,8 +26,16 @@ class Helpers:
         return len(Helpers.get_used_colours(colouring))
 
     @staticmethod
-    def __compute_teachers_preference(teachers: List[Teacher], colour: int) -> int:
-        return sum(list(map(lambda teacher: teacher.weights[colour], teachers)))
+    def __compute_teachers_preference(teachers: List[Teacher], colour: int) -> float:
+        day = (colour - 1) // 12 + 1
+        hour = (colour - 1) % 12 + 1
+        weights = list(map(lambda teacher: teacher.weights[colour], teachers))
+        denominator = sum(weights)
+        numerator = 0
+        for weight in weights:
+            numerator += weight * day * hour
+        return numerator / denominator
+
     
     @staticmethod
     def generate_colour_set(teachers: List[Teacher]) -> List[int]:
