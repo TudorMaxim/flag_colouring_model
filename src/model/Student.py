@@ -1,5 +1,6 @@
 import json
 from model.Person import Person
+from utils import Constants
 
 class Student(Person):
     def __init__(self, id: int, name: str, course_ids=[]):
@@ -9,7 +10,7 @@ class Student(Person):
         return f'Student(id: {self.id}, name: {self.name})'
 
     @staticmethod
-    def from_json(path='datasets/small_dataset.json'):
+    def from_json(path=Constants.DEFAULT_DATASET):
         f = open(path, 'r')
         data = json.load(f)
         return [Student(student['id'], student['name'], student['course_ids']) for student in data['students']]

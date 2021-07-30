@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>765</width>
-    <height>307</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Timetabling Simutator</string>
+   <string>University Timetabling Simutator</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget#Home {

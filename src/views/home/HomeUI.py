@@ -134,7 +134,7 @@ class Ui_Home(object):
 
     def retranslateUi(self, Home):
         _translate = QtCore.QCoreApplication.translate
-        Home.setWindowTitle(_translate("Home", "Timetabling Simutator"))
+        Home.setWindowTitle(_translate("Home", "University Timetabling Simutator"))
         self.title_label.setText(_translate("Home", "University Timetabling Simulator"))
         self.select_label.setText(_translate("Home", "Select Dataset:"))
         self.selected_dataset_label.setText(_translate("Home", "small_dataset.json"))
