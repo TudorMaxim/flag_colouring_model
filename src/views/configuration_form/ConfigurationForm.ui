@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConfigurationForm</class>
+ <widget class="QWidget" name="ConfigurationForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1031</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#ConfigurationForm {
+	background: white;
+	max-height: 450px;
+}
+
+QLabel {
+	font-weight: bold;
+	font-size: 16px;
+	qproperty-alignment: AlignLeft;
+	margin-left: 2px;
+}
+
+QGroupBox {
+	font: MS Shell Dlg;
+	font-size: 20px;
+	color: red;
+}
+
+QPushButton {
+	max-width: 100px;
+	min-height: 35px;
+	color: white;
+	font-weight: bold;
+	background-color: red;
+	border-radius: 5px;
+}
+
+QPushButton:hover:!pressed {
+	background-color: #EC3812;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="main_form_layout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="algorithm_label">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Algorithm:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="algorithm_combo_box">
+       <item>
+        <property name="text">
+         <string>Largest Degree Ordering Algorithm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Degree Of Saturation Algorithm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Recursive Largest First Algorithm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Evolutionary Algorithm</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="advanced_group_box">
+     <property name="title">
+      <string>Advanced</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="1" column="0">
+       <widget class="QLabel" name="genrations_label">
+        <property name="text">
+         <string>Generations:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="generations_input">
+        <property name="text">
+         <string>100</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="population_size_label">
+        <property name="text">
+         <string>Population Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="population_size_input">
+        <property name="text">
+         <string>100</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="mutation_rate_label">
+        <property name="text">
+         <string>Mutation Probability:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="mutation_rate_input">
+        <property name="text">
+         <string>60</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="max_daily_break_label">
+        <property name="text">
+         <string>Max Daily Break:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="max_daily_break_input">
+        <property name="text">
+         <string>2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="max_courses_per_day_label">
+        <property name="text">
+         <string>Max Daily Courses: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="max_courses_per_day_input">
+        <property name="text">
+         <string>6</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="penalties_group_box">
+     <property name="title">
+      <string>Penalties</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="invalid_solution_label">
+        <property name="text">
+         <string>Invalid Solution Penalty:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="invalid_solution_input">
+        <property name="text">
+         <string>1024</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="overcrowding_label">
+        <property name="text">
+         <string>Overcrowding Penalty:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="overcrowding_input">
+        <property name="text">
+         <string>64</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="fragmentation_label">
+        <property name="text">
+         <string>Fragmentation Penalty:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="fragmentation_input">
+        <property name="text">
+         <string>32</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="uniformity_label">
+        <property name="text">
+         <string>Uniformity Penalty:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="uniformity_input">
+        <property name="text">
+         <string>16</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="submit_button">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Submit</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

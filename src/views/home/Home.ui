@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>765</width>
-    <height>300</height>
+    <width>1028</width>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,59 +16,62 @@
   <property name="styleSheet">
    <string notr="true">QWidget#Home {
 	background: white;
-}</string>
+	max-height: 175px;
+}
+
+QLabel {
+	color: red;
+	font-weight: bold;
+	font-size: 18px;
+	height: 35px;
+}
+
+QLabel#select_label {
+	qproperty-alignment: AlignLeft;
+	margin-top: 24px;
+	margin-bottom: 2px;
+}
+
+QLabel#selected_dataset_label {
+	qproperty-alignment: AlignLeft;
+	padding-top: 5px;
+	border: 1px solid red;
+	border-radius: 5px;
+}
+
+QPushButton {
+	height: 35px;
+	width: 100px;
+	color: white;
+	font-weight: bold;
+	background-color: red;
+	border-radius: 5px;
+}
+
+QPushButton:hover:!pressed {
+	background-color: #EC3812;
+}
+
+
+QPushButton#reset_button {
+	max-height: 35px;
+	color: red;
+	font-weight: bold;
+	background-color: 	#D3D3D3;
+	border-radius: 5px;
+}
+
+QPushButton#reset_button:hover:!pressed {
+	background-color: #DCDCDC;
+}
+
+
+</string>
   </property>
   <layout class="QVBoxLayout" name="home_layout">
-   <item>
-    <layout class="QHBoxLayout" name="header_layout">
-     <property name="spacing">
-      <number>10</number>
-     </property>
-     <property name="sizeConstraint">
-      <enum>QLayout::SetFixedSize</enum>
-     </property>
-     <item>
-      <widget class="QLabel" name="logo_image">
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>125</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap>../../../assets/klc_logo.svg</pixmap>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="title_label">
-       <property name="styleSheet">
-        <string notr="true">QLabel {
-	font-size: 35px;
-	font-weight: bold;
-	color: red;
-	max-height: 100px;
-}</string>
-       </property>
-       <property name="text">
-        <string>University Timetabling Simulator</string>
-       </property>
-       <property name="scaledContents">
-        <bool>false</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
    <item>
     <layout class="QVBoxLayout" name="selection_vertical_layout">
      <property name="spacing">
@@ -77,14 +80,7 @@
      <item>
       <widget class="QLabel" name="select_label">
        <property name="styleSheet">
-        <string notr="true">QLabel {
-	color: red;
-	font-weight: bold;
-	font-size: 18px;
-	qproperty-alignment: AlignLeft;
-	margin-top: 24px;
-	margin-bottom: 2px;
-}</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Select Dataset:</string>
@@ -96,18 +92,13 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="selection_horizontal_layout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
        <item>
         <widget class="QLabel" name="selected_dataset_label">
          <property name="styleSheet">
-          <string notr="true">QLabel {
-	color: red;
-	font-weight: bold;
-	font-size: 18px;
-	qproperty-alignment: AlignLeft;
-	padding-top: 5px;
-	border: 1px solid red;
-	border-radius: 5px;
-}</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>small_dataset.json</string>
@@ -155,23 +146,25 @@ QPushButton:hover:!pressed {
      <item>
       <layout class="QHBoxLayout" name="action_buttons_layout">
        <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QPushButton" name="reset_button">
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton {
-	max-height: 35px;
-	color: red;
-	font-weight: bold;
-	background-color: 	#D3D3D3;
-	border-radius: 5px;
-}
-
-QPushButton:hover:!pressed {
-	background-color: #DCDCDC;
-}
-</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>Reset</string>
@@ -184,22 +177,25 @@ QPushButton:hover:!pressed {
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton {
-	max-height: 35px;
-	color: white;
-	font-weight: bold;
-	background-color: red;
-	border-radius: 5px;
-}
-
-QPushButton:hover:!pressed {
-	background-color: #EC3812;
-}</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>Start</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>

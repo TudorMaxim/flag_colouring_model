@@ -6,8 +6,6 @@ from views.simulator.SimulatorWidget import SimulatorWidget
 
 def main():
     app = QApplication(sys.argv)
-    # home_widget = HomeWidget()
-    # home_widget.show()
     simulator = SimulatorWidget(parent=None, flags=Qt.WindowFlags())
     simulator.show()
     sys.exit(app.exec_())

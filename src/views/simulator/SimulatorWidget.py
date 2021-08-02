@@ -1,12 +1,11 @@
 from typing import Optional, Union
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QListWidgetItem, QMainWindow, QWidget
-from controller.StudentsController import StudentsController
-from controller.TeachersController import TeachersController
-from model.Student import Student
-from model.Teacher import Teacher
-from utils import Constants
+from PyQt5.QtWidgets import QMainWindow, QWidget
+from views.configuration_form.ConfigurationFormWidget import ConfigurationFormWidget
+from views.dataset.DatasetWidget import DatasetWidget
+from views.home.HomeWidget import HomeWidget
 from views.simulator.SimulatorUI import Ui_Simulator
+from views.timetable.TimetableWidget import TimetableWidget
 
 
 class SimulatorWidget(QMainWindow):
@@ -15,37 +14,40 @@ class SimulatorWidget(QMainWindow):
         self.ui = Ui_Simulator()
         self.ui.setupUi(self)
 
-        self.dataset = Constants.DEFAULT_DATASET
-        self.students_controller = StudentsController(dataset=self.dataset)
-        self.teachers_controller = TeachersController(dataset=self.dataset)
+        self.home_widget = HomeWidget(parent=self, navigation_callback=self.on_dataset_click)
+        self.run_widget = ConfigurationFormWidget(parent=self)
+        self.dataset_widget = DatasetWidget(parent=self)
+        self.timetable_widget = TimetableWidget(parent=self)
 
-        student_items = list(map(self.__map_student_to_list_item, self.students_controller.get_list()))
-        self.ui.students_list_widget.itemClicked.connect(self.on_student_click)
-        for student in student_items:
-            self.ui.students_list_widget.addItem(student)
+        # Clear the stack widget.
+        [self.ui.stacked_widget.removeWidget(self.ui.stacked_widget.widget(0)) for _ in range(2)]
 
-        teacher_items = list(map(self.__map_teacher_to_list_item, self.teachers_controller.get_list()))
-        self.ui.teachers_list_widget.itemClicked.connect(self.on_teacher_click)
-        for teacher in teacher_items:
-            self.ui.teachers_list_widget.addItem(teacher)
+        self.ui.stacked_widget.addWidget(self.home_widget)
+        self.ui.stacked_widget.addWidget(self.run_widget)
+        self.ui.stacked_widget.addWidget(self.dataset_widget)
+        self.ui.stacked_widget.addWidget(self.timetable_widget)
+        self.ui.stacked_widget.setCurrentIndex(2)
+
+        self.ui.action_change_dataset.setShortcut('Ctrl+E')
+        self.ui.action_change_dataset.triggered.connect(self.on_change_dataset_click)
+
+        self.ui.action_create_timetable.setShortcut('Ctrl+R')
+        self.ui.action_create_timetable.triggered.connect(self.on_create_timetable_click)
         
+        self.ui.action_dataset.setShortcut('Ctrl+D')
+        self.ui.action_dataset.triggered.connect(self.on_dataset_click)
 
-    def __map_student_to_list_item(self, student: Student) -> QListWidgetItem:
-        item = QListWidgetItem()
-        item.setText(student.name)
-        item.setData(Qt.UserRole, student)
-        return item
-    
-    def __map_teacher_to_list_item(self, teacher: Teacher) -> QListWidgetItem:
-        item = QListWidgetItem()
-        item.setText(teacher.name)
-        item.setData(Qt.UserRole, teacher)
-        return item
-    
-    def on_student_click(self, item: QListWidgetItem) -> None:
-        print(item.text())
-    
-    def on_teacher_click(self, item: QListWidgetItem) -> None:
-        print(item.text())
-    
+        self.ui.action_timetable.setShortcut('Ctrl+T')
+        self.ui.action_timetable.triggered.connect(self.on_timetable_click)
 
+    def on_change_dataset_click(self):
+        self.ui.stacked_widget.setCurrentIndex(0)
+
+    def on_create_timetable_click(self):
+        self.ui.stacked_widget.setCurrentIndex(1)
+
+    def on_dataset_click(self):
+        self.ui.stacked_widget.setCurrentIndex(2)
+    
+    def on_timetable_click(self):
+        self.ui.stacked_widget.setCurrentIndex(3)

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Timetable</class>
+ <widget class="QWidget" name="Timetable">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1075</width>
+    <height>562</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#Timetable {
+	background: white;
+}
+
+QLabel {
+	font-size: 18px;
+	color: red;
+	font-weight: bold;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="timetable_label">
+     <property name="text">
+      <string>Timetable:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="timetable_widget">
+     <property name="rowCount">
+      <number>12</number>
+     </property>
+     <property name="columnCount">
+      <number>5</number>
+     </property>
+     <row>
+      <property name="text">
+       <string>08:00 - 09:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>09:00 - 10:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>10:00 - 11:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>11:00 - 12:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>12:00 - 13:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>13:00 - 14:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>14:00 - 15:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>15:00 - 16:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>16:00 - 17:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>17:00 - 18:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>18:00 - 19:00</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>19:00 - 20:00</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>Monday</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Tuesday</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Wednesday</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Thursday</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Friday</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

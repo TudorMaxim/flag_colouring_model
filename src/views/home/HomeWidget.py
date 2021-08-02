@@ -3,10 +3,11 @@ from views.home.HomeUI import Ui_Home
 
 
 class HomeWidget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, navigation_callback=None):
         super(HomeWidget, self).__init__(parent=parent)
         self.ui = Ui_Home()
         self.ui.setupUi(self)
+        self.__navigation_callback = navigation_callback
 
         self.path = ''
         self.ui.selected_dataset_label.setText('')
@@ -40,5 +41,4 @@ class HomeWidget(QWidget):
             msg.setWindowTitle("Error")
             msg.exec_()
         else:
-            # TODO: start simumator screen
-            print(f'Starting simulator with dataset: {self.path}')
+            self.__navigation_callback()

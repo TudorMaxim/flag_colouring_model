@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dataset</class>
+ <widget class="QWidget" name="Dataset">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1064</width>
+    <height>491</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#Dataset {
+	background: white;
+}
+
+QPushButton {
+	min-height: 50px;
+	width: 150px;
+	font-weight: bold;
+	border-radius: 5px;
+	color: red;
+	background-color: 	#D3D3D3;
+}
+
+QPushButton:hover:!pressed {
+	background-color: #DCDCDC;
+}
+
+
+QPushButton:pressed, QPushButton[cssClass=&quot;active&quot;] {
+	color: white;
+	background-color: red;
+}
+
+QPushButton:pressed:hover, QPushButton[cssClass=&quot;active&quot;]:hover {
+	background-color: #EC3812;
+}
+
+
+</string>
+  </property>
+  <widget class="QListWidget" name="list_widget">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>10</y>
+     <width>881</width>
+     <height>451</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>152</width>
+     <height>451</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="students_button">
+      <property name="text">
+       <string>Students</string>
+      </property>
+      <property name="cssClass" stdset="0">
+       <string>active</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="teachers_button">
+      <property name="text">
+       <string>Teachers</string>
+      </property>
+      <property name="cssClass" stdset="0">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="courses_button">
+      <property name="text">
+       <string>Courses</string>
+      </property>
+      <property name="cssClass" stdset="0">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
