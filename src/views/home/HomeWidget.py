@@ -1,12 +1,15 @@
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
+from controller.ApplicationController import ApplicationController
 from views.home.HomeUI import Ui_Home
 
 
 class HomeWidget(QWidget):
-    def __init__(self, parent=None, navigation_callback=None):
+    def __init__(self, parent=None, application_controller: ApplicationController = None, navigation_callback=None):
         super(HomeWidget, self).__init__(parent=parent)
         self.ui = Ui_Home()
         self.ui.setupUi(self)
+
+        self.application_controller = application_controller
         self.__navigation_callback = navigation_callback
 
         self.path = ''
@@ -41,4 +44,5 @@ class HomeWidget(QWidget):
             msg.setWindowTitle("Error")
             msg.exec_()
         else:
+            self.application_controller.change_dataset(self.path)
             self.__navigation_callback()
