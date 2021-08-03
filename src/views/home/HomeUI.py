@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Home(object):
     def setupUi(self, Home):
         Home.setObjectName("Home")
-        Home.resize(1028, 175)
+        Home.resize(1028, 160)
         Home.setStyleSheet("QWidget#Home {\n"
 "    background: white;\n"
 "    max-height: 175px;\n"
@@ -70,6 +70,7 @@ class Ui_Home(object):
 "")
         self.home_layout = QtWidgets.QVBoxLayout(Home)
         self.home_layout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.home_layout.setContentsMargins(0, -1, 0, -1)
         self.home_layout.setObjectName("home_layout")
         self.selection_vertical_layout = QtWidgets.QVBoxLayout()
         self.selection_vertical_layout.setSpacing(7)

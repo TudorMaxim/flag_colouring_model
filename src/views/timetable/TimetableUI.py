@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Timetable(object):
     def setupUi(self, Timetable):
         Timetable.setObjectName("Timetable")
-        Timetable.resize(1075, 562)
+        Timetable.resize(1158, 537)
         Timetable.setStyleSheet("QWidget#Timetable {\n"
 "    background: white;\n"
 "}\n"
@@ -23,13 +23,60 @@ class Ui_Timetable(object):
 "    font-size: 18px;\n"
 "    color: red;\n"
 "    font-weight: bold;\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"    min-height: 50px;\n"
+"    width: 150px;\n"
+"    font-weight: bold;\n"
+"    border-radius: 5px;\n"
+"    color: red;\n"
+"    background-color:     #D3D3D3;\n"
+"}\n"
+"\n"
+"QPushButton:hover:!pressed {\n"
+"    background-color: #DCDCDC;\n"
+"}\n"
+"\n"
+"\n"
+"QPushButton:pressed, QPushButton[cssClass=\"active\"] {\n"
+"    color: white;\n"
+"    background-color: red;\n"
+"}\n"
+"\n"
+"QPushButton:pressed:hover, QPushButton[cssClass=\"active\"]:hover {\n"
+"    background-color: #EC3812;\n"
 "}")
-        self.verticalLayout = QtWidgets.QVBoxLayout(Timetable)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Timetable)
+        self.verticalLayout_2.setContentsMargins(0, -1, 0, -1)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.timetable_label = QtWidgets.QLabel(Timetable)
         self.timetable_label.setObjectName("timetable_label")
-        self.verticalLayout.addWidget(self.timetable_label)
+        self.verticalLayout_2.addWidget(self.timetable_label)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.students_button = QtWidgets.QPushButton(Timetable)
+        self.students_button.setObjectName("students_button")
+        self.verticalLayout.addWidget(self.students_button)
+        self.teachers_button = QtWidgets.QPushButton(Timetable)
+        self.teachers_button.setProperty("cssClass", "")
+        self.teachers_button.setObjectName("teachers_button")
+        self.verticalLayout.addWidget(self.teachers_button)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.list_widget = QtWidgets.QListWidget(Timetable)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.list_widget.sizePolicy().hasHeightForWidth())
+        self.list_widget.setSizePolicy(sizePolicy)
+        self.list_widget.setObjectName("list_widget")
+        self.horizontalLayout.addWidget(self.list_widget)
         self.timetable_widget = QtWidgets.QTableWidget(Timetable)
+        self.timetable_widget.setShowGrid(True)
         self.timetable_widget.setRowCount(12)
         self.timetable_widget.setColumnCount(5)
         self.timetable_widget.setObjectName("timetable_widget")
@@ -67,7 +114,8 @@ class Ui_Timetable(object):
         self.timetable_widget.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
         self.timetable_widget.setHorizontalHeaderItem(4, item)
-        self.verticalLayout.addWidget(self.timetable_widget)
+        self.horizontalLayout.addWidget(self.timetable_widget)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
 
         self.retranslateUi(Timetable)
         QtCore.QMetaObject.connectSlotsByName(Timetable)
@@ -76,6 +124,9 @@ class Ui_Timetable(object):
         _translate = QtCore.QCoreApplication.translate
         Timetable.setWindowTitle(_translate("Timetable", "Form"))
         self.timetable_label.setText(_translate("Timetable", "Timetable:"))
+        self.students_button.setText(_translate("Timetable", "Students"))
+        self.students_button.setProperty("cssClass", _translate("Timetable", "active"))
+        self.teachers_button.setText(_translate("Timetable", "Teachers"))
         item = self.timetable_widget.verticalHeaderItem(0)
         item.setText(_translate("Timetable", "08:00 - 09:00"))
         item = self.timetable_widget.verticalHeaderItem(1)

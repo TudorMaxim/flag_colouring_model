@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1028</width>
-    <height>175</height>
+    <height>160</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,6 +71,12 @@ QPushButton#reset_button:hover:!pressed {
   <layout class="QVBoxLayout" name="home_layout">
    <property name="sizeConstraint">
     <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
    </property>
    <item>
     <layout class="QVBoxLayout" name="selection_vertical_layout">

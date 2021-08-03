@@ -14,13 +14,21 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dataset(object):
     def setupUi(self, Dataset):
         Dataset.setObjectName("Dataset")
-        Dataset.resize(1064, 491)
+        Dataset.resize(1028, 565)
         Dataset.setStyleSheet("QWidget#Dataset {\n"
 "    background: white;\n"
 "}\n"
 "\n"
+"QLabel {\n"
+"    color: red;\n"
+"    font-weight: bold;\n"
+"    font-size: 18px;\n"
+"    height: 35px;\n"
+"}\n"
+"\n"
 "QPushButton {\n"
 "    min-height: 50px;\n"
+"    max-width: 150px;\n"
 "    width: 150px;\n"
 "    font-weight: bold;\n"
 "    border-radius: 5px;\n"
@@ -42,30 +50,54 @@ class Ui_Dataset(object):
 "    background-color: #EC3812;\n"
 "}\n"
 "\n"
+"QGroupBox {\n"
+"    font-size: 20px;\n"
+"    color: red;\n"
+"    font-weight: bold;\n"
+"}\n"
 "\n"
 "")
-        self.list_widget = QtWidgets.QListWidget(Dataset)
-        self.list_widget.setGeometry(QtCore.QRect(160, 10, 881, 451))
-        self.list_widget.setObjectName("list_widget")
-        self.widget = QtWidgets.QWidget(Dataset)
-        self.widget.setGeometry(QtCore.QRect(0, 10, 152, 451))
-        self.widget.setObjectName("widget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Dataset)
+        self.verticalLayout_2.setContentsMargins(0, -1, 0, -1)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.dataset_label = QtWidgets.QLabel(Dataset)
+        self.dataset_label.setObjectName("dataset_label")
+        self.verticalLayout_2.addWidget(self.dataset_label)
+        self.list_layout = QtWidgets.QHBoxLayout()
+        self.list_layout.setObjectName("list_layout")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.students_button = QtWidgets.QPushButton(self.widget)
+        self.students_button = QtWidgets.QPushButton(Dataset)
         self.students_button.setObjectName("students_button")
         self.verticalLayout.addWidget(self.students_button)
-        self.teachers_button = QtWidgets.QPushButton(self.widget)
+        self.teachers_button = QtWidgets.QPushButton(Dataset)
         self.teachers_button.setProperty("cssClass", "")
         self.teachers_button.setObjectName("teachers_button")
         self.verticalLayout.addWidget(self.teachers_button)
-        self.courses_button = QtWidgets.QPushButton(self.widget)
+        self.courses_button = QtWidgets.QPushButton(Dataset)
         self.courses_button.setProperty("cssClass", "")
         self.courses_button.setObjectName("courses_button")
         self.verticalLayout.addWidget(self.courses_button)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
+        self.list_layout.addLayout(self.verticalLayout)
+        self.list_widget = QtWidgets.QListWidget(Dataset)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.list_widget.sizePolicy().hasHeightForWidth())
+        self.list_widget.setSizePolicy(sizePolicy)
+        self.list_widget.setObjectName("list_widget")
+        self.list_layout.addWidget(self.list_widget)
+        self.groupBox = QtWidgets.QGroupBox(Dataset)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
+        self.groupBox.setSizePolicy(sizePolicy)
+        self.groupBox.setObjectName("groupBox")
+        self.list_layout.addWidget(self.groupBox)
+        self.verticalLayout_2.addLayout(self.list_layout)
 
         self.retranslateUi(Dataset)
         QtCore.QMetaObject.connectSlotsByName(Dataset)
@@ -73,10 +105,12 @@ class Ui_Dataset(object):
     def retranslateUi(self, Dataset):
         _translate = QtCore.QCoreApplication.translate
         Dataset.setWindowTitle(_translate("Dataset", "Form"))
+        self.dataset_label.setText(_translate("Dataset", "Dataset: "))
         self.students_button.setText(_translate("Dataset", "Students"))
         self.students_button.setProperty("cssClass", _translate("Dataset", "active"))
         self.teachers_button.setText(_translate("Dataset", "Teachers"))
         self.courses_button.setText(_translate("Dataset", "Courses"))
+        self.groupBox.setTitle(_translate("Dataset", "Details"))
 
 
 if __name__ == "__main__":
