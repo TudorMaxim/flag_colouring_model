@@ -45,6 +45,11 @@ QPushButton:pressed, QPushButton[cssClass=&quot;active&quot;] {
 
 QPushButton:pressed:hover, QPushButton[cssClass=&quot;active&quot;]:hover {
 	background-color: #EC3812;
+}
+
+QTableWidget::item {
+	min-width: 200px;
+	min-height: 100px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">

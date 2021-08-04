@@ -186,7 +186,7 @@ QPushButton:hover:!pressed {
           <string notr="true"/>
          </property>
          <property name="text">
-          <string>Start</string>
+          <string>Save</string>
          </property>
         </widget>
        </item>

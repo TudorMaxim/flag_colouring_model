@@ -7,6 +7,7 @@ from utils import Constants
 from views.configuration_form.ConfigurationFormWidget import ConfigurationFormWidget
 from views.dataset.DatasetWidget import DatasetWidget
 from views.home.HomeWidget import HomeWidget
+from views.loader.LoadingSpinnerWidget import LoadingSpinnerWidget
 from views.simulator.SimulatorUI import Ui_Simulator
 from views.timetable.TimetableWidget import TimetableWidget
 
@@ -27,11 +28,12 @@ class SimulatorWidget(QMainWindow):
         self.home_widget = HomeWidget(
             parent=self,
             application_controller=self.application_controller,
-            navigation_callback=self.on_dataset_click
+            navigation_callback=self.change_dataset
         )
         self.run_widget = ConfigurationFormWidget(
             parent=self,
-            timetabling_controller=self.timetabling_controller
+            timetabling_controller=self.timetabling_controller,
+            stacked_widget=self.ui.stacked_widget
         )
         self.dataset_widget = DatasetWidget(
             parent=self,
@@ -39,8 +41,10 @@ class SimulatorWidget(QMainWindow):
         )
         self.timetable_widget = TimetableWidget(
             parent=self,
-            application_controller=self.application_controller
+            application_controller=self.application_controller,
+            timetabling_controller=self.timetabling_controller
         )
+        self.loader_widget = LoadingSpinnerWidget(parent=self)
 
         # Clear the stack widget.
         [self.ui.stacked_widget.removeWidget(self.ui.stacked_widget.widget(0)) for _ in range(2)]
@@ -49,6 +53,7 @@ class SimulatorWidget(QMainWindow):
         self.ui.stacked_widget.addWidget(self.run_widget)
         self.ui.stacked_widget.addWidget(self.dataset_widget)
         self.ui.stacked_widget.addWidget(self.timetable_widget)
+        self.ui.stacked_widget.addWidget(self.loader_widget)
         self.ui.stacked_widget.setCurrentIndex(2)
 
         self.ui.action_change_dataset.setShortcut('Ctrl+E')
@@ -76,3 +81,15 @@ class SimulatorWidget(QMainWindow):
     
     def on_timetable_click(self):
         self.ui.stacked_widget.setCurrentIndex(3)
+
+    def change_dataset(self) -> None:
+        self.dataset_widget.on_students_button_click()
+        self.timetable_widget.on_students_button_click()
+        self.timetabling_controller = TimetablingController(
+            students=self.application_controller.get_students(),
+            teachers=self.application_controller.get_teachers(),
+            courses=self.application_controller.get_courses()
+        )
+        self.run_widget.timetabling_controller = self.timetabling_controller
+        self.timetable_widget.timetabling_controller = self.timetabling_controller
+        self.ui.stacked_widget.setCurrentIndex(2)

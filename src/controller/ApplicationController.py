@@ -29,3 +29,12 @@ class ApplicationController:
     
     def get_courses(self) -> dict[int, Course]:
         return self.courses_repository.courses
+
+    def get_student(self, student_id: int) -> Student:
+        return self.students_repository.students[student_id]
+    
+    def get_teacher(self, teacher_id: int) -> Teacher:
+        return self.teachers_repository.teachers[teacher_id]
+    
+    def get_course(self, course_id: int) -> Course:
+        return self.courses_repository.courses[course_id]

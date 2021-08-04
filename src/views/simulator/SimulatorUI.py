@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Simulator(object):
     def setupUi(self, Simulator):
         Simulator.setObjectName("Simulator")
-        Simulator.resize(1043, 501)
+        Simulator.resize(1226, 758)
         Simulator.setStyleSheet("QWidget#centralwidget {\n"
 "    background-color: white;\n"
 "}")
@@ -55,7 +55,7 @@ class Ui_Simulator(object):
         self.verticalLayout.addWidget(self.stacked_widget)
         Simulator.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Simulator)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1043, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1226, 26))
         self.menubar.setObjectName("menubar")
         self.menu_file = QtWidgets.QMenu(self.menubar)
         self.menu_file.setObjectName("menu_file")

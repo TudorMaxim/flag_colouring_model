@@ -46,6 +46,11 @@ class Ui_Timetable(object):
 "\n"
 "QPushButton:pressed:hover, QPushButton[cssClass=\"active\"]:hover {\n"
 "    background-color: #EC3812;\n"
+"}\n"
+"\n"
+"QTableWidget::item {\n"
+"    min-width: 200px;\n"
+"    min-height: 100px;\n"
 "}")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Timetable)
         self.verticalLayout_2.setContentsMargins(0, -1, 0, -1)

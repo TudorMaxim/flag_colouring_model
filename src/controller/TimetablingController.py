@@ -1,3 +1,4 @@
+from typing import List
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
@@ -23,6 +24,7 @@ class TimetablingController:
             teachers_map=self.teachers,
             courses_map=self.courses
         )
+        self.is_running = False
         self.colouring = None
 
     def set_algorithm(
@@ -64,5 +66,23 @@ class TimetablingController:
         Constants.MAX_DAILY_BREAK = max_daily_break
     
     def schedule(self) -> dict[int, int]:
+        self.is_running = True
         self.colouring = self.algorithm.run(self.colour_set)
+        self.is_running = False
         return self.colouring
+    
+    def get_student_timetable(self, student_id: int) -> dict[int, int]:
+        if self.colouring is None:
+            return {}
+        return self.__get_timetable_for(course_ids=self.students[student_id].course_ids)
+    
+    def get_teacher_timetable(self, teacher_id: int) -> dict[int, int]:
+        if self.colouring is None:
+            return {}
+        return self.__get_timetable_for(course_ids=self.teachers[teacher_id].course_ids)
+        
+    def __get_timetable_for(self, course_ids: List[int]) -> dict[int, int]:
+        timetable = {}
+        for course_id in course_ids:
+            timetable[course_id] = self.colouring[course_id]
+        return timetable

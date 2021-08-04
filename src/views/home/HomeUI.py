@@ -137,7 +137,7 @@ class Ui_Home(object):
         self.selected_dataset_label.setText(_translate("Home", "small_dataset.json"))
         self.browse_button.setText(_translate("Home", "Browse"))
         self.reset_button.setText(_translate("Home", "Reset"))
-        self.start_button.setText(_translate("Home", "Start"))
+        self.start_button.setText(_translate("Home", "Save"))
 
 
 if __name__ == "__main__":

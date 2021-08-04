@@ -194,7 +194,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         plt.xlabel('Generation')
         plt.ylabel('Fitness')
         plt.title('Evolution of the population and its best individual')
-        plt.show()
+        # plt.show()
         return best.get_colouring()
 
     # Generational population
@@ -232,7 +232,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         plt.xlabel('Generation')
         plt.ylabel('Fitness')
         plt.title('Evolution of the population and its best individual')
-        plt.show()
+        # plt.show()
         return best.get_colouring()
 
     def run(self, colours_set: List) -> dict:

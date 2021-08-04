@@ -1,5 +1,5 @@
 from os import stat
-from typing import List
+from typing import List, Tuple
 from utils import Constants
 from model.Teacher import Teacher
 from model.Course import Course
@@ -52,6 +52,13 @@ class Helpers:
             positions.append(position)
         return positions
     
+    @staticmethod
+    def get_hour_and_day(colour: int) -> Tuple[int, int]:
+        assert colour <= 60 and colour >= 1
+        day = (colour - 1) // 12
+        hour = (colour - 1) % 12
+        return hour, day
+ 
     @staticmethod
     def map_colour_to_timeslot(colour: int) -> str:
         assert colour <= 60 and colour >= 1
