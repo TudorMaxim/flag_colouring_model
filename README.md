@@ -2,10 +2,11 @@
 
 This project serves as my dissertation for my master's degree at King's College London.
 
-## TODOs
+## TODOs:
 
-* Complete fitness function
-* Start with a population with valid solutions only
-* Crossover - change entire colour classes instead of randomly cutting 2 points
-* Explore if replacing the entire population can produce better solutions
-* Add weights for teacher preferences
+* Complete details page for students, teachers and courses
+* Add CSV-export button on Timetable screen
+
+## Optional:
+* CRUD operations for students, teachers and courses
+* Enroll student to a course
