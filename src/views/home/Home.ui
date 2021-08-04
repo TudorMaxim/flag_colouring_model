@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Home</class>
+ <widget class="QWidget" name="Home">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1028</width>
+    <height>160</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>University Timetabling Simutator</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#Home {
+	background: white;
+	max-height: 175px;
+}
+
+QLabel {
+	color: red;
+	font-weight: bold;
+	font-size: 18px;
+	height: 35px;
+}
+
+QLabel#select_label {
+	qproperty-alignment: AlignLeft;
+	margin-top: 24px;
+	margin-bottom: 2px;
+}
+
+QLabel#selected_dataset_label {
+	qproperty-alignment: AlignLeft;
+	padding-top: 5px;
+	border: 1px solid red;
+	border-radius: 5px;
+}
+
+QPushButton {
+	height: 35px;
+	width: 100px;
+	color: white;
+	font-weight: bold;
+	background-color: red;
+	border-radius: 5px;
+}
+
+QPushButton:hover:!pressed {
+	background-color: #EC3812;
+}
+
+
+QPushButton#reset_button {
+	max-height: 35px;
+	color: red;
+	font-weight: bold;
+	background-color: 	#D3D3D3;
+	border-radius: 5px;
+}
+
+QPushButton#reset_button:hover:!pressed {
+	background-color: #DCDCDC;
+}
+
+
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="home_layout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="selection_vertical_layout">
+     <property name="spacing">
+      <number>7</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="select_label">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Select Dataset:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="selection_horizontal_layout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QLabel" name="selected_dataset_label">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>small_dataset.json</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="browse_button">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+	max-width: 100px;
+	max-height: 35px;
+	color: white;
+	font-weight: bold;
+	background-color: red;
+	border-radius: 5px;
+}
+
+QPushButton:hover:!pressed {
+	background-color: #EC3812;
+}</string>
+         </property>
+         <property name="text">
+          <string>Browse</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="action_buttons_layout">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="reset_button">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Reset</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="start_button">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

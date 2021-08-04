@@ -1,5 +1,5 @@
 from os import stat
-from typing import List
+from typing import List, Tuple
 from utils import Constants
 from model.Teacher import Teacher
 from model.Course import Course
@@ -26,8 +26,16 @@ class Helpers:
         return len(Helpers.get_used_colours(colouring))
 
     @staticmethod
-    def __compute_teachers_preference(teachers: List[Teacher], colour: int) -> int:
-        return sum(list(map(lambda teacher: teacher.weights[colour], teachers)))
+    def __compute_teachers_preference(teachers: List[Teacher], colour: int) -> float:
+        day = (colour - 1) // 12 + 1
+        hour = (colour - 1) % 12 + 1
+        weights = list(map(lambda teacher: teacher.weights[colour], teachers))
+        denominator = sum(weights)
+        numerator = 0
+        for weight in weights:
+            numerator += weight * day * hour
+        return numerator / denominator
+
     
     @staticmethod
     def generate_colour_set(teachers: List[Teacher]) -> List[int]:
@@ -44,6 +52,13 @@ class Helpers:
             positions.append(position)
         return positions
     
+    @staticmethod
+    def get_hour_and_day(colour: int) -> Tuple[int, int]:
+        assert colour <= 60 and colour >= 1
+        day = (colour - 1) // 12
+        hour = (colour - 1) % 12
+        return hour, day
+ 
     @staticmethod
     def map_colour_to_timeslot(colour: int) -> str:
         assert colour <= 60 and colour >= 1

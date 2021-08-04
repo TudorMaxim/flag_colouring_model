@@ -21,7 +21,7 @@ from utils.Helpers import Helpers
 class EvolutionaryAlgorithmConfig(Enum):
     GENERATIONAL_POPULATION = 'generational'
     STEADY_STATE_POPULATION = 'steady_state'
-    ROULETTE_WHEEL_SLECTION = 'roulette_wheel'
+    ROULETTE_WHEEL_SELECTION = 'roulette_wheel'
     TOURNAMENT_SELECTION = 'tournament'
 
 class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
@@ -32,7 +32,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         teachers_map: dict[int, Teacher] = None,
         courses_map: dict[int, Course] = None,
         population_model: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.GENERATIONAL_POPULATION,
-        selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SLECTION
+        selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION
     ) -> None:
         super().__init__(graph, students_map, teachers_map, courses_map)
         self.generations_cnt = Constants.GENERATIONS_CNT
@@ -49,14 +49,14 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         unique = np.unique(np.array(fitnesses))
         return len(unique) / len(fitnesses)
 
-    def __get_average_fitness(self, population: List[Chromosome]) -> float:
-        return sum(list(map(lambda chromosome: chromosome.fitness(), population))) / len(population)
+    def __get_average_fitness(self, population: List[Tuple[Chromosome, float]]) -> float:
+        return sum(list(map(lambda pair: pair[1], population))) / len(population)
     
-    def __get_best(self, population: List[Chromosome]) -> Chromosome:
-       return min(population, key=lambda chromosome: chromosome.fitness())
+    def __get_best(self, population: List[Tuple[Chromosome, float]]) -> Tuple[Chromosome, float]:
+       return min(population, key=lambda pair: pair[1])
 
     # Function that generates a population of valid solutions
-    def __generate_population(self, colours_set: List[int]) -> List[Chromosome]:
+    def __generate_population(self, colours_set: List[int]) -> List[Tuple[Chromosome, float]]:
         heuristics = [
             DegreeOfSaturation(self._graph),
             RecursiveLargestFirst(self._graph),
@@ -110,42 +110,44 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         
         diversity = self.__get_population_diverstity_ratio(population)
         print(f'Population diversity ratio: {diversity}\n')
-        return population
+        return list(map(lambda chromosome: (chromosome, chromosome.fitness()), population))
 
     # Roulette Wheel selection
     # Each individual has a chance to be selected
     # The better the fitness, the higher the chance to be selected
-    def __roulette_wheel(self, population: List[Chromosome], chosen: List[bool]) -> Tuple[Chromosome, int]:
-        fitness_sum = int(sum(list(map(lambda chromosome: chromosome.fitness(), population))))
+    def __roulette_wheel(self, population: List[Tuple[Chromosome, float]], chosen: List[bool]) -> Tuple[Chromosome, int]:
+        fitness_sum = int(sum(list(map(lambda pair: pair[1], population))))
         fixed_point = randint(0, fitness_sum)
         idx = 0
         partial_sum = 0
         while partial_sum < fixed_point and idx < len(population):
-            partial_sum += population[idx].fitness() if not chosen[idx] else 0
+            partial_sum += population[idx][1] if not chosen[idx] else 0
             idx += 1
         if idx == len(population):
-            return population[-1], len(population) - 1
-        return population[idx], idx
+            return population[-1][0], len(population) - 1
+        return population[idx][0], idx
     
     # Tournament selection
     # Select the best chromosome out of k random ones.
-    def __tournament(self, population: List[Chromosome], k: int = 2) -> Tuple[Chromosome, int]:
+    def __tournament(self, population: List[Tuple[Chromosome, float]], k: int = 2) -> Tuple[Chromosome, int]:
         if k < 2:
             raise ValueError('Error: you must select at least 2 solutions to compete in tournament selection')
         choices = [i for i in range(len(population))]
         shuffle(choices)
         best = None
+        best_fitness = None
         pos = -1
         for i in range(k):
-            if best is None or population[choices[i]].fitness() < best.fitness():
-                best  = population[choices[i]]
+            if best is None or population[choices[i]][1] < best_fitness:
+                best = population[choices[i]][0]
+                best_fitness = population[choices[i]][1]
                 pos = choices[i]
         return best, pos
 
     # The method selects 2 parents using eather roulette wheel or tournament approach.
     # Returns 2 Chromosome objects and their indices.
-    def __selection(self, population: List[Chromosome]) -> Tuple[Chromosome, int, Chromosome, int]:
-        if self.selection_method == EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SLECTION:
+    def __selection(self, population: List[Tuple[Chromosome, float]]) -> Tuple[Chromosome, int, Chromosome, int]:
+        if self.selection_method == EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION:
             chosen = [False for _ in population]
             parent1, i = self.__roulette_wheel(population, chosen)
             chosen[i] = True
@@ -153,38 +155,38 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         else:
             parent1, i = self.__tournament(population)
             parent2, j = self.__tournament(population)
-
         return parent1, i, parent2, j
 
     # Steady State EA - 2 parents are selected to produce offspring
     # The offspring replace the parents if their fitness is better. 
     def __steady_state(self, colours_set: List[int]) -> dict[int, int]:
         population = self.__generate_population(colours_set)
-        best = self.__get_best(population)
+        best, fitness = self.__get_best(population)
         x_axis = [i for i in range(0, self.generations_cnt + 1)]
-        best_fitness_y_axis = [best.fitness()]
+        best_fitness_y_axis = [fitness]
         avegare_fitness_y_axis = [self.__get_average_fitness(population)]
         for generation in range(self.generations_cnt):
             parent1, i, parent2, j = self.__selection(population)
             offspring1, offspring2 = parent1.crossover(parent2)
-            offspring1.colour_class_mutation(self.mutation_probability, colours_set)
-            offspring2.colour_class_mutation(self.mutation_probability, colours_set)
-            offspring1.single_colour_mutation(self.mutation_probability, colours_set)
-            offspring2.single_colour_mutation(self.mutation_probability, colours_set)
-            offspring1.colour_class_split_mutation(self.mutation_probability, colours_set)
-            offspring2.colour_class_split_mutation(self.mutation_probability, colours_set)
+            offspring1.mutate(self.mutation_probability, colours_set)
+            offspring2.mutate(self.mutation_probability, colours_set)
 
             # Keep only the best 2 solutions in the population
-            options = sorted([offspring1, offspring2, population[i], population[j]], key=lambda chromosome: chromosome.fitness())
+            options = sorted([
+                (offspring1, offspring1.fitness()),
+                (offspring2, offspring2.fitness()),
+                population[i],
+                population[j]
+            ], key=lambda pair: pair[1])
             population[i] = options[0]
             population[j] = options[1]
 
-            best = self.__get_best(population)
-            best_fitness_y_axis.append(best.fitness())
+            best, fitness = self.__get_best(population)
+            best_fitness_y_axis.append(fitness)
             avegare_fitness_y_axis.append(self.__get_average_fitness(population))
 
             print(f'Generation {generation}')
-            print(f'Best fitness: {best.fitness()}\n')
+            print(f'Best fitness: {fitness}\n')
         
         plt.plot(x_axis, best_fitness_y_axis)
         plt.plot(x_axis, avegare_fitness_y_axis)
@@ -192,40 +194,37 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         plt.xlabel('Generation')
         plt.ylabel('Fitness')
         plt.title('Evolution of the population and its best individual')
-        plt.show()
+        # plt.show()
         return best.get_colouring()
 
     # Generational population
     # At each generation, the entire population is replaced with the offspring   
     def __generational(self, colours_set: List[int]) -> dict[int, int]:
         population = self.__generate_population(colours_set)
-        best = self.__get_best(population)
+        best, fitness = self.__get_best(population)
         x_axis = [i for i in range(0, self.generations_cnt + 1)]
-        best_fitness_y_axis = [best.fitness()]
+        best_fitness_y_axis = [fitness]
         avegare_fitness_y_axis = [self.__get_average_fitness(population)]
         for generation in range(self.generations_cnt):
             # 2-Tournament selection - shuffle the population and select pairs of consecutive chromosomes.
             shuffle(population)
             next_generation = []
             for i in range(1, len(population), 2):
-                offspring1, offspring2 = population[i].crossover(population[i - 1])
-                offspring1.colour_class_mutation(self.mutation_probability, colours_set)
-                offspring2.colour_class_mutation(self.mutation_probability, colours_set)
-                offspring1.single_colour_mutation(self.mutation_probability, colours_set)
-                offspring2.single_colour_mutation(self.mutation_probability, colours_set)
-                offspring1.colour_class_split_mutation(self.mutation_probability, colours_set)
-                offspring2.colour_class_split_mutation(self.mutation_probability, colours_set)
-                next_generation.append(offspring1)
-                next_generation.append(offspring2)
+                offspring1, offspring2 = population[i][0].crossover(population[i - 1][0])
+                offspring1.mutate(self.mutation_probability, colours_set)
+                offspring2.mutate(self.mutation_probability, colours_set)
+                next_generation.append((offspring1, offspring1.fitness()))
+                next_generation.append((offspring2, offspring2.fitness()))
             
             population = next_generation
-            current = self.__get_best(population)
-            if current.fitness() < best.fitness():
+            current, current_fitness = self.__get_best(population)
+            if current_fitness < fitness:
                 best = current
-            best_fitness_y_axis.append(best.fitness())
+                fitness = current_fitness
+            best_fitness_y_axis.append(fitness)
             avegare_fitness_y_axis.append(self.__get_average_fitness(population))
             print(f'Generation {generation}')
-            print(f'Best fitness: {best.fitness()}\n')
+            print(f'Best fitness: {fitness}\n')
         
         plt.plot(x_axis, best_fitness_y_axis)
         plt.plot(x_axis, avegare_fitness_y_axis)
@@ -233,7 +232,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         plt.xlabel('Generation')
         plt.ylabel('Fitness')
         plt.title('Evolution of the population and its best individual')
-        plt.show()
+        # plt.show()
         return best.get_colouring()
 
     def run(self, colours_set: List) -> dict:

@@ -1,3 +1,4 @@
+from copy import deepcopy
 import numpy as np
 from typing import List, Tuple
 from random import choice, randint
@@ -26,6 +27,15 @@ class Chromosome:
         if not genes:
             self.__genes = {}
 
+    def copy(self):
+        return Chromosome(
+            graph=self.__graph,
+            students_map=self.__students_map,
+            teachers_map=self.__teachers_map,
+            courses_map=self.__courses_map,
+            genes=deepcopy(self.__genes)
+        )
+    
     def get_colouring(self) -> dict:
         return self.__genes
 
@@ -91,13 +101,19 @@ class Chromosome:
         return penalty
 
     # Fitness function based on weights for teacher preferences and various penalties
-    def fitness(self) -> int:
-        score = 0
+    def fitness(self) -> float:
+        numerator = 0
+        denominator = 0
         for course in self.__genes:
             teacher_id = self.__courses_map[course].teacher_id
             weights = self.__teachers_map[teacher_id].weights
-            score += weights[self.__genes[course]]
+            weight = weights[self.__genes[course]]
+            day = ((self.__genes[course] - 1) // 12) + 1
+            hour = ((self.__genes[course] - 1) % 12) + 1
+            numerator += weight * day * hour
+            denominator += weight
 
+        score = numerator / denominator
         fitness = score * Helpers.get_used_colours_count(self.__genes)
         return fitness + self.penalty()
 
@@ -176,3 +192,17 @@ class Chromosome:
             if self.__genes[course] == old_colour and cnt % 2 == 0:
                 self.__genes[course] = new_colour
             cnt += 1
+
+    def mutate(self, probability: int, colour_set: List[int]) -> None:
+        colour_class_mutant = self.copy()
+        colour_class_mutant.colour_class_mutation(probability, colour_set)
+        single_colour_mutant = self.copy()
+        single_colour_mutant.single_colour_mutation(probability, colour_set)
+        colour_class_split_mutant = self.copy()
+        colour_class_split_mutant.colour_class_split_mutation(probability, colour_set)
+        self = min([
+            self,
+            colour_class_mutant,
+            colour_class_split_mutant,
+            single_colour_mutant
+        ], key=lambda chromosome: chromosome.fitness())
