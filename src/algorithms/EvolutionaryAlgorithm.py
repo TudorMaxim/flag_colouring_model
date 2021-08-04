@@ -21,7 +21,7 @@ from utils.Helpers import Helpers
 class EvolutionaryAlgorithmConfig(Enum):
     GENERATIONAL_POPULATION = 'generational'
     STEADY_STATE_POPULATION = 'steady_state'
-    ROULETTE_WHEEL_SLECTION = 'roulette_wheel'
+    ROULETTE_WHEEL_SELECTION = 'roulette_wheel'
     TOURNAMENT_SELECTION = 'tournament'
 
 class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
@@ -32,7 +32,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         teachers_map: dict[int, Teacher] = None,
         courses_map: dict[int, Course] = None,
         population_model: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.GENERATIONAL_POPULATION,
-        selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SLECTION
+        selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION
     ) -> None:
         super().__init__(graph, students_map, teachers_map, courses_map)
         self.generations_cnt = Constants.GENERATIONS_CNT
@@ -147,7 +147,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
     # The method selects 2 parents using eather roulette wheel or tournament approach.
     # Returns 2 Chromosome objects and their indices.
     def __selection(self, population: List[Tuple[Chromosome, float]]) -> Tuple[Chromosome, int, Chromosome, int]:
-        if self.selection_method == EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SLECTION:
+        if self.selection_method == EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION:
             chosen = [False for _ in population]
             parent1, i = self.__roulette_wheel(population, chosen)
             chosen[i] = True

@@ -2,6 +2,7 @@ from typing import Optional, Union
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QWidget
 from controller.ApplicationController import ApplicationController
+from controller.TimetablingController import TimetablingController
 from utils import Constants
 from views.configuration_form.ConfigurationFormWidget import ConfigurationFormWidget
 from views.dataset.DatasetWidget import DatasetWidget
@@ -17,15 +18,29 @@ class SimulatorWidget(QMainWindow):
         self.ui.setupUi(self)
 
         self.application_controller = ApplicationController(dataset=Constants.DEFAULT_DATASET)
+        self.timetabling_controller = TimetablingController(
+            students=self.application_controller.get_students(),
+            teachers=self.application_controller.get_teachers(),
+            courses=self.application_controller.get_courses()
+        )
 
         self.home_widget = HomeWidget(
             parent=self,
             application_controller=self.application_controller,
             navigation_callback=self.on_dataset_click
         )
-        self.run_widget = ConfigurationFormWidget(parent=self)
-        self.dataset_widget = DatasetWidget(parent=self, application_controller=self.application_controller)
-        self.timetable_widget = TimetableWidget(parent=self)
+        self.run_widget = ConfigurationFormWidget(
+            parent=self,
+            timetabling_controller=self.timetabling_controller
+        )
+        self.dataset_widget = DatasetWidget(
+            parent=self,
+            application_controller=self.application_controller
+        )
+        self.timetable_widget = TimetableWidget(
+            parent=self,
+            application_controller=self.application_controller
+        )
 
         # Clear the stack widget.
         [self.ui.stacked_widget.removeWidget(self.ui.stacked_widget.widget(0)) for _ in range(2)]
@@ -56,6 +71,7 @@ class SimulatorWidget(QMainWindow):
 
     def on_dataset_click(self):
         self.dataset_widget.on_students_button_click()
+        self.timetable_widget.on_students_button_click()
         self.ui.stacked_widget.setCurrentIndex(2)
     
     def on_timetable_click(self):

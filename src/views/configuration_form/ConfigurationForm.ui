@@ -22,7 +22,6 @@
   <property name="styleSheet">
    <string notr="true">QWidget#ConfigurationForm {
 	background: white;
-	/* max-height: 450px; */
 }
 
 QLabel {
@@ -77,10 +76,16 @@ QPushButton:hover:!pressed {
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>205</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>350</height>
+       <height>400</height>
       </size>
      </property>
      <property name="currentIndex">
@@ -92,7 +97,7 @@ QPushButton:hover:!pressed {
         <x>0</x>
         <y>0</y>
         <width>1027</width>
-        <height>53</height>
+        <height>111</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -100,6 +105,12 @@ QPushButton:hover:!pressed {
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
       </property>
       <attribute name="label">
        <string>Scheduler</string>
@@ -137,6 +148,48 @@ QPushButton:hover:!pressed {
            <item>
             <property name="text">
              <string>Evolutionary Algorithm</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="population_model_label">
+           <property name="text">
+            <string>Population Model:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="population_model_combo_box">
+           <item>
+            <property name="text">
+             <string>Steady-State Population</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Generational Population</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="selection_method_label">
+           <property name="text">
+            <string>Selection Method:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="selection_method_combo_box">
+           <item>
+            <property name="text">
+             <string>Roulette-Wheel Selection</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Tournament Selection</string>
             </property>
            </item>
           </widget>
