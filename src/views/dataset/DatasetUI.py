@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dataset(object):
     def setupUi(self, Dataset):
         Dataset.setObjectName("Dataset")
-        Dataset.resize(1028, 565)
+        Dataset.resize(1162, 400)
         Dataset.setStyleSheet("QWidget#Dataset {\n"
 "    background: white;\n"
 "}\n"
@@ -56,13 +56,30 @@ class Ui_Dataset(object):
 "    font-weight: bold;\n"
 "}\n"
 "\n"
-"")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Dataset)
-        self.verticalLayout_2.setContentsMargins(0, -1, 0, -1)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+"QPushButton#delete_button, QPushButton#edit_button {\n"
+"    max-width: 75px;\n"
+"}\n"
+"\n"
+"\n"
+"QListWidget {\n"
+"    border: 1px solid silver;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QListWidget#courses_list_widget {\n"
+"    margin-top: 8px;\n"
+"    border: 0px;\n"
+"}\n"
+"\n"
+"QListWidget::item {\n"
+"    font-size: 50px;\n"
+"}")
+        Dataset.setProperty("active", False)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(Dataset)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.dataset_label = QtWidgets.QLabel(Dataset)
         self.dataset_label.setObjectName("dataset_label")
-        self.verticalLayout_2.addWidget(self.dataset_label)
+        self.verticalLayout_4.addWidget(self.dataset_label)
         self.list_layout = QtWidgets.QHBoxLayout()
         self.list_layout.setObjectName("list_layout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -89,15 +106,53 @@ class Ui_Dataset(object):
         self.list_widget.setSizePolicy(sizePolicy)
         self.list_widget.setObjectName("list_widget")
         self.list_layout.addWidget(self.list_widget)
-        self.groupBox = QtWidgets.QGroupBox(Dataset)
+        self.details_groupbox = QtWidgets.QGroupBox(Dataset)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
-        self.groupBox.setSizePolicy(sizePolicy)
-        self.groupBox.setObjectName("groupBox")
-        self.list_layout.addWidget(self.groupBox)
-        self.verticalLayout_2.addLayout(self.list_layout)
+        sizePolicy.setHeightForWidth(self.details_groupbox.sizePolicy().hasHeightForWidth())
+        self.details_groupbox.setSizePolicy(sizePolicy)
+        self.details_groupbox.setObjectName("details_groupbox")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.details_groupbox)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.formLayout = QtWidgets.QFormLayout()
+        self.formLayout.setObjectName("formLayout")
+        self.name_info_label = QtWidgets.QLabel(self.details_groupbox)
+        self.name_info_label.setObjectName("name_info_label")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.name_info_label)
+        self.id_info_label = QtWidgets.QLabel(self.details_groupbox)
+        self.id_info_label.setObjectName("id_info_label")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.id_info_label)
+        self.courses_list_label = QtWidgets.QLabel(self.details_groupbox)
+        self.courses_list_label.setObjectName("courses_list_label")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.courses_list_label)
+        self.courses_list_widget = QtWidgets.QListWidget(self.details_groupbox)
+        self.courses_list_widget.setObjectName("courses_list_widget")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.courses_list_widget)
+        self.id_input = QtWidgets.QLineEdit(self.details_groupbox)
+        self.id_input.setObjectName("id_input")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.id_input)
+        self.name_input = QtWidgets.QLineEdit(self.details_groupbox)
+        self.name_input.setObjectName("name_input")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.name_input)
+        self.verticalLayout_3.addLayout(self.formLayout)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.edit_button = QtWidgets.QPushButton(self.details_groupbox)
+        self.edit_button.setObjectName("edit_button")
+        self.horizontalLayout.addWidget(self.edit_button)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
+        self.delete_button = QtWidgets.QPushButton(self.details_groupbox)
+        self.delete_button.setObjectName("delete_button")
+        self.horizontalLayout.addWidget(self.delete_button)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+        self.list_layout.addWidget(self.details_groupbox)
+        self.verticalLayout_4.addLayout(self.list_layout)
 
         self.retranslateUi(Dataset)
         QtCore.QMetaObject.connectSlotsByName(Dataset)
@@ -110,7 +165,13 @@ class Ui_Dataset(object):
         self.students_button.setProperty("cssClass", _translate("Dataset", "active"))
         self.teachers_button.setText(_translate("Dataset", "Teachers"))
         self.courses_button.setText(_translate("Dataset", "Courses"))
-        self.groupBox.setTitle(_translate("Dataset", "Details"))
+        self.details_groupbox.setTitle(_translate("Dataset", "Details"))
+        self.name_info_label.setText(_translate("Dataset", "Name: "))
+        self.id_info_label.setText(_translate("Dataset", "ID:"))
+        self.courses_list_label.setText(_translate("Dataset", "Courses:"))
+        self.edit_button.setText(_translate("Dataset", "Edit"))
+        self.delete_button.setText(_translate("Dataset", "Delete"))
+        self.delete_button.setProperty("cssClass", _translate("Dataset", "active"))
 
 
 if __name__ == "__main__":

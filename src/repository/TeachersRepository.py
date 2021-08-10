@@ -15,6 +15,7 @@ class TeachersRepository:
 
     def remove(self, id: int) -> None:
         self.teachers.pop(id)
+        
 
     def update(self, teacher: Teacher) -> None:
         self.teachers[teacher.id] = Teacher

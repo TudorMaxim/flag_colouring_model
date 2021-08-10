@@ -48,9 +48,19 @@ class Ui_Timetable(object):
 "    background-color: #EC3812;\n"
 "}\n"
 "\n"
+"QTableWidget {\n"
+"    border: 1px solid silver;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
 "QTableWidget::item {\n"
 "    min-width: 200px;\n"
 "    min-height: 100px;\n"
+"}\n"
+"\n"
+"QListWidget {\n"
+"    border: 1px solid silver;\n"
+"    border-radius: 5px;\n"
 "}")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Timetable)
         self.verticalLayout_2.setContentsMargins(0, -1, 0, -1)
