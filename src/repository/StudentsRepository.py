@@ -7,9 +7,10 @@ class StudentsRepository:
     def __init__(self, dataset: str = Constants.DEFAULT_DATASET) -> None:
         self.students = Helpers.build_ids_map(Student.from_json(path=dataset))
 
-    def add(self, name: str) -> None:
-        student_id = 1 + max(self.students, key=lambda student: student.id).id
-        student = Student(id=student_id, name=name, course_ids=[])
+    def add(self, name: str, course_ids: List[int]) -> None:
+        student_with_max_id = max(self.students.values(), key=lambda student: student.id)
+        student_id = 1 + student_with_max_id.id
+        student = Student(id=student_id, name=name, course_ids=course_ids)
         self.students[student_id] = student
     
     def remove(self, id: int) -> None:

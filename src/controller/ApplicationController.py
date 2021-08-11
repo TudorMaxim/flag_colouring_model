@@ -1,5 +1,6 @@
 
 import json
+from typing import List, Optional
 from model.Course import Course
 from model.Person import Person
 from model.Student import Student
@@ -56,6 +57,31 @@ class ApplicationController:
                 return teacher
         return None
     
+    def add_student(self, name: str, course_ids: List[int]):
+        assert name != '', 'Error: Student name cannot be blank!'
+        assert len(course_ids), 'Error: A student must be enroled in at least one course!'
+        for course_id in course_ids:
+            assert \
+                course_id in list(map(lambda course: course.id, self.get_courses().values())), \
+                f'Error: Course with id {course_id} does not exist!'
+        self.students_repository.add(name, course_ids)
+
+    def add_teacher(self, name: str, course_ids: List[int]):
+        assert name != '', 'Error: Teacher name cannot be blank!'
+        for course_id in course_ids:
+            assert \
+                course_id in list(map(lambda course: course.id, self.get_courses().values())), \
+                f'Error: Course with id {course_id} does not exist!'
+        self.teachers_repository.add(name, course_ids)
+    
+    def add_course(self, name: str, teacher_id: Optional[int]):
+        assert name != '', 'Error: Course name cannot be blank!'
+        if teacher_id is not None:
+            assert \
+                teacher_id in list(map(lambda teacher: teacher.id, self.get_teachers().values())), \
+                f'Error: teacher with id {teacher_id} does not exist!'
+        self.courses_repository.add(name, teacher_id)
+
     def update(self, entity, name: str) -> None:
         entity.name = name
         if isinstance(entity, Student):

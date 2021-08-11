@@ -1,11 +1,10 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QListWidgetItem, QListWidget
-from typing import List, Callable
 from controller.ApplicationController import ApplicationController
 from model.Course import Course
+from utils.Helpers import Helpers
 from views.dataset.DatasetUI import Ui_Dataset
 from model.Teacher import Teacher
-from model.Student import Student
 
 active_button = 'QPushButton {color: white; background-color: red;}'
 inactive_button = 'QPushButton {color: red; background-color: #D3D3D3;}'
@@ -30,17 +29,11 @@ class DatasetWidget(QWidget):
         self.ui.save_dataset_button.clicked.connect(self.on_save_button_click)
 
         self.ui.list_widget.itemClicked.connect(self.__on_student_click)
-        self.__populate(
+        Helpers.populate(
             list_widget=self.ui.list_widget,
-            entities=self.application_controller.students_repository.get_list(),
-            mapper=self.__map_student_to_list_item
+            entities=self.application_controller.get_students().values(),
+            mapper=Helpers.map_student_to_list_item
         )
-
-    def __populate(self, list_widget: QListWidget, entities: List, mapper: Callable):
-        list_widget.clear()
-        items = list(map(mapper, entities))
-        for item in items:
-            list_widget.addItem(item)
 
     def on_save_button_click(self):
         dataset = self.application_controller.get_dataset()
@@ -50,10 +43,10 @@ class DatasetWidget(QWidget):
         self.ui.courses_button.setStyleSheet(inactive_button)
         self.ui.teachers_button.setStyleSheet(inactive_button)
         self.ui.students_button.setStyleSheet(active_button)
-        self.__populate(
+        Helpers.populate(
             list_widget=self.ui.list_widget,
             entities=self.application_controller.get_students().values(),
-            mapper=self.__map_student_to_list_item
+            mapper=Helpers.map_student_to_list_item
         )
         self.ui.list_widget.itemClicked.disconnect()
         self.ui.list_widget.itemClicked.connect(self.__on_student_click)
@@ -64,10 +57,10 @@ class DatasetWidget(QWidget):
         self.ui.courses_button.setStyleSheet(inactive_button)
         self.ui.students_button.setStyleSheet(inactive_button)
         self.ui.teachers_button.setStyleSheet(active_button)
-        self.__populate(
+        Helpers.populate(
             list_widget=self.ui.list_widget,
             entities=self.application_controller.get_teachers().values(),
-            mapper=self.__map_teacher_to_list_item
+            mapper=Helpers.map_teacher_to_list_item
         )
         self.ui.list_widget.itemClicked.disconnect()
         self.ui.list_widget.itemClicked.connect(self.__on_teacher_click)
@@ -78,10 +71,10 @@ class DatasetWidget(QWidget):
         self.ui.students_button.setStyleSheet(inactive_button)
         self.ui.teachers_button.setStyleSheet(inactive_button)
         self.ui.courses_button.setStyleSheet(active_button)
-        self.__populate(
+        Helpers.populate(
             list_widget=self.ui.list_widget,
             entities=self.application_controller.get_courses().values(),
-            mapper=self.__map_course_to_list_item
+            mapper=Helpers.map_course_to_list_item
         )
         self.ui.list_widget.itemClicked.disconnect()
         self.ui.list_widget.itemClicked.connect(self.__on_course_click)
@@ -96,10 +89,10 @@ class DatasetWidget(QWidget):
         self.ui.name_input.setText(student.name)
         courses = self.application_controller.get_courses_for(person=student)
         self.ui.courses_list_label.setText('Courses:')
-        self.__populate(
+        Helpers.populate(
             list_widget=self.ui.courses_list_widget,
             entities=courses.values(),
-            mapper=self.__map_course_to_list_item
+            mapper=Helpers.map_course_to_list_item
         )
 
     def __on_teacher_click(self, item: QListWidgetItem) -> None:
@@ -109,12 +102,19 @@ class DatasetWidget(QWidget):
         self.ui.name_input.setText(teacher.name)
         courses = self.application_controller.get_courses_for(person=teacher)
         self.ui.courses_list_label.setText('Courses:')
-        self.__populate(
-            list_widget=self.ui.courses_list_widget,
-            entities=courses.values(),
-            mapper=self.__map_course_to_list_item
-        )
-
+        if len(courses):
+            Helpers.populate(
+                list_widget=self.ui.courses_list_widget,
+                entities=courses.values(),
+                mapper=Helpers.map_course_to_list_item
+            )
+        else:
+            Helpers.populate(
+                list_widget=self.ui.courses_list_widget,
+                entities=['No course was assigned to this teacher!'],
+                mapper=lambda x: QListWidgetItem(x)
+            )
+        
     def __on_course_click(self, item: QListWidgetItem) -> None:
         course = item.data(Qt.UserRole)
         self.current_item = course
@@ -123,16 +123,16 @@ class DatasetWidget(QWidget):
         self.ui.courses_list_label.setText('Teacher:')
         teacher = self.application_controller.get_teacher_of(course)
         if teacher is None:
-            self.__populate(
+            Helpers.populate(
                 list_widget=self.ui.courses_list_widget,
-                entities=['No teacher was assigned to this course'],
+                entities=['No teacher was assigned to this course!'],
                 mapper=lambda x: QListWidgetItem(x)
             )
         else:
-            self.__populate(
+            Helpers.populate(
                 list_widget=self.ui.courses_list_widget,
                 entities=[teacher],
-                mapper=self.__map_teacher_to_list_item
+                mapper=Helpers.map_teacher_to_list_item
             )
 
     # Details Page actions
@@ -160,14 +160,14 @@ class DatasetWidget(QWidget):
         entity = item.data(Qt.UserRole)
         self.application_controller.delete(entity)
         entities = self.application_controller.get_students().values()
-        mapper = self.__map_student_to_list_item
+        mapper = Helpers.map_student_to_list_item
         if isinstance(entity, Teacher):
             entities = self.application_controller.get_teachers().values()
-            mapper = self.__map_teacher_to_list_item
+            mapper = Helpers.map_teacher_to_list_item
         elif isinstance(entity, Course):
             entities = self.application_controller.get_courses().values()
-            mapper = self.__map_course_to_list_item
-        self.__populate(
+            mapper = Helpers.map_course_to_list_item
+        Helpers.populate(
             list_widget=self.ui.list_widget,
             entities=entities,
             mapper=mapper
@@ -179,21 +179,3 @@ class DatasetWidget(QWidget):
         self.ui.name_input.setText('')
         self.ui.courses_list_widget.clear()
     
-    # Mappers
-    def __map_student_to_list_item(self, student: Student) -> QListWidgetItem:
-        item = QListWidgetItem()
-        item.setText(student.name)
-        item.setData(Qt.UserRole, student)
-        return item
-
-    def __map_course_to_list_item(self, course: Course) -> QListWidgetItem:
-        item = QListWidgetItem()
-        item.setText(course.name)
-        item.setData(Qt.UserRole, course)
-        return item
-
-    def __map_teacher_to_list_item(self, teacher: Teacher) -> QListWidgetItem:
-        item = QListWidgetItem()
-        item.setText(teacher.name)
-        item.setData(Qt.UserRole, teacher)
-        return item

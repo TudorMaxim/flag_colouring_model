@@ -1,7 +1,9 @@
 from random import randint, shuffle, choice
-from PyQt5.QtWidgets import QMessageBox
-from typing import List, Tuple
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMessageBox, QListWidget, QListWidgetItem
+from typing import List, Tuple, Callable
 from utils import Constants
+from model.Student import Student
 from model.Teacher import Teacher
 from model.Course import Course
 
@@ -158,3 +160,32 @@ class Helpers:
         msg.setInformativeText(informative_text)
         msg.setWindowTitle("Error")
         msg.exec_()
+
+    # QListWdiget Helpers
+    @staticmethod
+    def populate(list_widget: QListWidget, entities: List, mapper: Callable):
+        list_widget.clear()
+        items = list(map(mapper, entities))
+        for item in items:
+            list_widget.addItem(item)
+    
+    @staticmethod
+    def map_student_to_list_item(student: Student) -> QListWidgetItem:
+        item = QListWidgetItem()
+        item.setText(student.name)
+        item.setData(Qt.UserRole, student)
+        return item
+    
+    @staticmethod
+    def map_course_to_list_item(course: Course) -> QListWidgetItem:
+        item = QListWidgetItem()
+        item.setText(course.name)
+        item.setData(Qt.UserRole, course)
+        return item
+
+    @staticmethod
+    def map_teacher_to_list_item(teacher: Teacher) -> QListWidgetItem:
+        item = QListWidgetItem()
+        item.setText(teacher.name)
+        item.setData(Qt.UserRole, teacher)
+        return item
