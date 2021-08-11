@@ -1,5 +1,5 @@
 from typing import List, Callable, Optional
-from PyQt5.QtWidgets import QTableWidgetItem, QWidget, QListWidgetItem
+from PyQt5.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QListWidgetItem
 from PyQt5.QtCore import Qt
 from controller.ApplicationController import ApplicationController
 from controller.TimetablingController import TimetablingController
@@ -23,6 +23,7 @@ class TimetableWidget(QWidget):
 
         self.ui.students_button.clicked.connect(self.on_students_button_click)
         self.ui.teachers_button.clicked.connect(self.on_teachers_button_click)
+        self.ui.export_button.clicked.connect(self.on_export_button_click)
 
         self.ui.list_widget.itemClicked.connect(self.__on_student_click)
         self.__populate(
@@ -35,6 +36,22 @@ class TimetableWidget(QWidget):
         self.ui.list_widget.clear()
         for item in items:
             self.ui.list_widget.addItem(item)
+
+    def on_export_button_click(self):
+        if self.timetabling_controller.colouring is None:
+            Helpers.show_error_message(
+                message='Error: Could not export the timetable!',
+                informative_text='Please create the timetable before trying to export it.'
+            )
+            return
+        try:
+            self.ui.export_button.setEnabled(False)
+            path = QFileDialog.getSaveFileName(self, 'Save Timetable', '*.csv')
+            self.timetabling_controller.export_to_csv(path=path[0])
+            self.ui.export_button.setEnabled(True)
+        except FileNotFoundError:
+            self.ui.export_button.setEnabled(True)
+
 
     def on_students_button_click(self):
         self.ui.teachers_button.setStyleSheet(inactive_button)

@@ -1,3 +1,4 @@
+import csv
 from typing import List
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
@@ -86,3 +87,17 @@ class TimetablingController:
         for course_id in course_ids:
             timetable[course_id] = self.colouring[course_id]
         return timetable
+
+    def export_to_csv(self, path: str) -> None:
+        if self.colouring is None:
+            return
+        header = ['Course ID', 'Course Name', 'Scheduled']
+        with open(path, 'w', encoding='UTF8', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(header)
+            data = [[
+                course.id,
+                course.name,
+                Helpers.map_colour_to_timeslot(self.colouring[course.id])
+            ] for course in self.courses.values()]
+            writer.writerows(data)

@@ -58,6 +58,8 @@ class GeneratorWidget(QWidget):
                 message='Error: invalid input',
                 informative_text=str(err)
             )
+        except FileNotFoundError:
+            self.ui.generate_button.setEnabled(True)
     
     def setup_integer_validator(self):
         integer_inputs = [
