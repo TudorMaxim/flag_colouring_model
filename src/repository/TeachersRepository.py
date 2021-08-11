@@ -18,7 +18,7 @@ class TeachersRepository:
         self.teachers.pop(id)
         
     def update(self, teacher: Teacher) -> None:
-        self.teachers[teacher.id] = Teacher
+        self.teachers[teacher.id] = teacher
 
     def find(self, id: int) -> Teacher:
         return self.teachers.get(id)

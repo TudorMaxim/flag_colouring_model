@@ -1,16 +1,11 @@
 from typing import Callable
-from enum import Enum
+from model.EntityType import EntityType
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QAbstractItemView, QWidget
 from views.new.CreateEntityUI import Ui_CreateEntity
 from controller.ApplicationController import ApplicationController
 from utils.Helpers import Helpers
 
-
-class EntityType(Enum):
-    STUDENT = 'student'
-    TEACHER = 'teacher'
-    COURSE = 'course'
 
 class CreateEntityWidget(QWidget):
     def __init__(self, parent, application_controller: ApplicationController, type: EntityType, navigation_callback: Callable):
@@ -29,8 +24,7 @@ class CreateEntityWidget(QWidget):
         self.ui.name_input.setText('')
         if self.type == EntityType.STUDENT:
             self.ui.create_label.setText('Create New Student:')
-            self.ui.courses_list_widget.setSelectionMode(
-                QAbstractItemView.ExtendedSelection)
+            self.ui.courses_list_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
             Helpers.populate(
                 list_widget=self.ui.courses_list_widget,
                 entities=self.application_controller.get_courses().values(),
@@ -38,8 +32,7 @@ class CreateEntityWidget(QWidget):
             )
         elif self.type == EntityType.TEACHER:
             self.ui.create_label.setText('Create New Teacher:')
-            self.ui.courses_list_widget.setSelectionMode(
-                QAbstractItemView.ExtendedSelection)
+            self.ui.courses_list_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
             Helpers.populate(
                 list_widget=self.ui.courses_list_widget,
                 entities=list(filter(lambda c: c.teacher_id is None,

@@ -159,3 +159,22 @@ class ApplicationController:
             'teachers': teachers,
             'courses': courses
         }
+
+    def assign_courses_to_student(self, student: Student, courses: List[Course]) -> None:
+        course_ids = list(map(lambda course: course.id, courses))
+        student.course_ids.extend(course_ids)
+        self.students_repository.update(student=student)
+    
+    def assign_courses_to_teacher(self, teacher: Teacher, courses: List[Course]) -> None:
+        course_ids = list(map(lambda course: course.id, courses))
+        teacher.course_ids.extend(course_ids)
+        self.teachers_repository.update(teacher=teacher)
+        for course in courses:
+            course.teacher_id = teacher.id
+            self.courses_repository.update(course)
+    
+    def assign_teacher_to_course(self, course: Course, teacher: Teacher) -> None:
+        course.teacher_id = teacher.id
+        self.courses_repository.update(course=course)
+        teacher.course_ids.append(course.id)
+        self.teachers_repository.update(teacher=teacher)

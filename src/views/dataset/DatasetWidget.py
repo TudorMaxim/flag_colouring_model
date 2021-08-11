@@ -1,8 +1,9 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QListWidgetItem, QListWidget
+from PyQt5.QtWidgets import QWidget, QListWidgetItem
 from controller.ApplicationController import ApplicationController
 from model.Course import Course
 from utils.Helpers import Helpers
+from views.assignment.AssignmentWidget import AssignmentWidget
 from views.dataset.DatasetUI import Ui_Dataset
 from model.Teacher import Teacher
 
@@ -17,6 +18,7 @@ class DatasetWidget(QWidget):
 
         self.application_controller = application_controller
         self.can_edit = False
+        self.assignment_widget = None
 
         self.ui.id_input.setEnabled(self.can_edit)
         self.ui.name_input.setEnabled(self.can_edit)
@@ -29,6 +31,7 @@ class DatasetWidget(QWidget):
         self.ui.save_dataset_button.clicked.connect(self.on_save_button_click)
 
         self.ui.list_widget.itemClicked.connect(self.__on_student_click)
+        self.ui.list_widget.itemDoubleClicked.connect(self.__on_item_double_click)
         Helpers.populate(
             list_widget=self.ui.list_widget,
             entities=self.application_controller.get_students().values(),
@@ -179,3 +182,18 @@ class DatasetWidget(QWidget):
         self.ui.name_input.setText('')
         self.ui.courses_list_widget.clear()
     
+    # Course and teacher assignment
+    def __on_item_double_click(self, item):
+        entity = item.data(Qt.UserRole)
+        navigation_callback = self.on_students_button_click
+        if isinstance(entity, Teacher):
+            navigation_callback = self.on_teachers_button_click
+        elif isinstance(entity, Course):
+            navigation_callback = self.on_courses_button_click
+        self.assignment_widget = AssignmentWidget(
+            parent=None,
+            application_controller=self.application_controller,
+            entity=entity,
+            navigation_callback=navigation_callback
+        )
+        self.assignment_widget.show()

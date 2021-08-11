@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CreateEntity</class>
- <widget class="QWidget" name="CreateEntity">
+ <class>Assignment</class>
+ <widget class="QWidget" name="Assignment">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1034</width>
-    <height>356</height>
+    <width>730</width>
+    <height>412</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#CreateEntity {
+   <string notr="true">QWidget#Assignment {
 	background-color: white;
 }
 
@@ -24,7 +24,7 @@ QLabel {
 	font-weight: bold;
 }
 
-QLabel#create_label {
+QLabel#title_label {
 	font-size: 20px;
 }
 
@@ -54,32 +54,22 @@ QListWidget::item::selected {
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="create_label">
+    <widget class="QLabel" name="title_label">
      <property name="text">
-      <string>Create New Student:</string>
+      <string>Assign courses to student Jon Doe:</string>
      </property>
     </widget>
    </item>
    <item>
     <layout class="QFormLayout" name="formLayout">
      <item row="0" column="0">
-      <widget class="QLabel" name="name_label">
+      <widget class="QLabel" name="available_course_label">
        <property name="text">
-        <string>Name:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="courses_label">
-       <property name="text">
-        <string>Courses:</string>
+        <string>Available Courses:</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="name_input"/>
-     </item>
-     <item row="1" column="1">
       <widget class="QListWidget" name="courses_list_widget"/>
      </item>
     </layout>
@@ -129,7 +119,7 @@ QListWidget::item::selected {
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>27</height>
+       <height>113</height>
       </size>
      </property>
     </spacer>
