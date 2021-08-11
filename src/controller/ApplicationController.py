@@ -1,4 +1,5 @@
 
+import json
 from model.Course import Course
 from model.Person import Person
 from model.Student import Student
@@ -7,6 +8,7 @@ from repository.CoursesRepository import CoursesRepository
 from repository.StudentsRepository import StudentsRepository
 from repository.TeachersRepository import TeachersRepository
 from utils import Constants
+from utils.Helpers import Helpers
 
 
 class ApplicationController:
@@ -79,5 +81,46 @@ class ApplicationController:
             for teacher in self.get_teachers().values():
                 if entity.id in teacher.course_ids:
                     teacher.course_ids.remove(entity.id)
-
+    
+    def generate_dataset(self, s: int, t: int, c: int, min_enrolment: int, max_enrolment: int) -> dict:
+        assert s >= c, 'The number of students should be greater than or equal to the number of courses.'
+        assert t <= c, 'The number of teachers should be less than or equal to the number of courses.'
+        assert s > t, 'The number of students must be greater than the number of teachers.'
+        courses = Helpers.generate_entities(c, default_names=[
+            'Big Data Technologies',
+            'Model Driven Development',
+            'Software Engineering',
+            'Distributed Ledgers',
+            'Security Engineering',
+            'Security Management',
+            'Software Testing',
+            'Artificial Intelligence'
+        ])
+        students = Helpers.generate_entities(s, default_names=[
+            'Tudor Maxim',
+            'Jon Doe',
+            'Jane Doe',
+            'Mark Doe',
+            'Mary Doe'
+        ])
+        teachers = Helpers.generate_entities(t, default_names=[
+            'Jon Smith',
+            'Jane Smith',
+            'Mark Smith'
+        ])
+        teachers = Helpers.assign_courses_to_teachers(teachers, c, t)
+        teachers = Helpers.generate_weights(teachers)
+        students = Helpers.assign_courses_to_students(students, c, min_enrolment, max_enrolment)
+        for i in range(len(courses)):
+            courses[i]['teacher_id'] = Helpers.find_teacher_id(
+                teachers, courses[i]['id'])
+        return {
+            'courses': courses,
+            'teachers': teachers,
+            'students': students,
+        }
+    
+    def save_dataset(self, dataset: dict, path: str) -> None:
+        with open(path, 'w') as file:
+            json.dump(dataset, file, indent=4)
     

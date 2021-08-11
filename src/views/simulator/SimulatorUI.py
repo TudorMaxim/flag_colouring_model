@@ -73,9 +73,12 @@ class Ui_Simulator(object):
         self.action_timetable.setObjectName("action_timetable")
         self.action_create_timetable = QtWidgets.QAction(Simulator)
         self.action_create_timetable.setObjectName("action_create_timetable")
+        self.action_create_dataset = QtWidgets.QAction(Simulator)
+        self.action_create_dataset.setObjectName("action_create_dataset")
         self.menu_file.addSeparator()
         self.menu_file.addAction(self.action_change_dataset)
         self.menu_file.addAction(self.action_create_timetable)
+        self.menu_file.addAction(self.action_create_dataset)
         self.menu_view.addAction(self.action_dataset)
         self.menu_view.addAction(self.action_timetable)
         self.menubar.addAction(self.menu_file.menuAction())
@@ -94,6 +97,7 @@ class Ui_Simulator(object):
         self.action_dataset.setText(_translate("Simulator", "Dataset"))
         self.action_timetable.setText(_translate("Simulator", "Timetable"))
         self.action_create_timetable.setText(_translate("Simulator", "Create Timetable"))
+        self.action_create_dataset.setText(_translate("Simulator", "Create Dataset"))
 
 
 if __name__ == "__main__":

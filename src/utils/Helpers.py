@@ -1,4 +1,5 @@
-from os import stat
+from random import randint, shuffle, choice
+from PyQt5.QtWidgets import QMessageBox
 from typing import List, Tuple
 from utils import Constants
 from model.Teacher import Teacher
@@ -36,7 +37,6 @@ class Helpers:
             numerator += weight * day * hour
         return numerator / denominator
 
-    
     @staticmethod
     def generate_colour_set(teachers: List[Teacher]) -> List[int]:
         colours_set = [i for i in range(1, Constants.COLOURS_CNT + 1)]
@@ -80,3 +80,81 @@ class Helpers:
             scheduled_time = Helpers.map_colour_to_timeslot(colouring[id])
             print(f'{course}: {scheduled_time}')
 
+    # Function that generates n entities based on a list of default names
+    @staticmethod
+    def generate_entities(n: int, default_names: List[str]) -> List:
+        cnt = [1 for _ in range(len(default_names))]
+        entities = []
+        for id in range(1, n + 1):
+            index = randint(0, len(default_names) - 1)
+            name = default_names[index] + f'#{cnt[index]}'
+            cnt[index] += 1
+            entities.append({
+                'id': id,
+                'name': name
+            })
+        return entities
+
+
+    # Function that randomly assings courses to students
+    # A student may have many courses and a course may have many students
+    @staticmethod
+    def assign_courses_to_students(students: List, c: int, minn: int, maxx: int) -> List:
+        course_ids = [i + 1 for i in range(c)]
+        assignments = []
+        for student in students:
+            shuffle(course_ids)
+            cnt = randint(minn, min(c - 1, maxx))
+            assignments.append({
+                'id': student['id'],
+                'name': student['name'],
+                'course_ids': course_ids[0:cnt]
+            })
+        return assignments
+
+    # Function that randomly assigns courses to teachers
+    # A teacher can have multiple courses, but a course can be held only by one teacher
+    @staticmethod
+    def assign_courses_to_teachers(teachers: List, c: int, t: int) -> List:
+        course_ids = [i + 1 for i in range(c)]
+        shuffle(course_ids)
+        for i in range(c):
+            idx = i % t
+            if 'course_ids' in teachers[idx]:
+                teachers[idx]['course_ids'].append(course_ids[i])
+            else:
+                teachers[idx]['course_ids'] = [course_ids[i]]
+        return teachers
+
+    # Function that finds the id of the teacher who is responsible with a course.
+    @staticmethod
+    def find_teacher_id(teachers: List, course_id: int) -> int:
+        for teacher in teachers:
+            if course_id in teacher['course_ids']:
+                return teacher['id']
+        raise ValueError(
+            f'Error: Could not find a teacher for course with id {course_id}.')
+
+    # Function that randomly generates preferences for teachers.
+    # 2 - preferred time slot
+    # 4 - indifferent
+    # 8 - unpreferred time slot
+    @staticmethod
+    def generate_weights(teachers: List) -> List:
+        options = [2, 4, 8]
+        for i in range(len(teachers)):
+            # The first element will always be 0 because colours start from 1
+            weights = [0] * (Constants.COLOURS_CNT + 1)
+            for j in range(1, len(weights)):
+                weights[j] = choice(options)
+            teachers[i]['weights'] = weights
+        return teachers
+
+    @staticmethod
+    def show_error_message(message: str, informative_text: str) -> None:
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText(message)
+        msg.setInformativeText(informative_text)
+        msg.setWindowTitle("Error")
+        msg.exec_()

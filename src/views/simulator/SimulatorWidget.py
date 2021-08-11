@@ -6,6 +6,7 @@ from controller.TimetablingController import TimetablingController
 from utils import Constants
 from views.configuration_form.ConfigurationFormWidget import ConfigurationFormWidget
 from views.dataset.DatasetWidget import DatasetWidget
+from views.generator.GeneratorWidget import GeneratorWidget
 from views.home.HomeWidget import HomeWidget
 from views.loader.LoadingSpinnerWidget import LoadingSpinnerWidget
 from views.simulator.SimulatorUI import Ui_Simulator
@@ -45,6 +46,11 @@ class SimulatorWidget(QMainWindow):
             timetabling_controller=self.timetabling_controller
         )
         self.loader_widget = LoadingSpinnerWidget(parent=self)
+        self.generator_widget = GeneratorWidget(
+            parent=self,
+            application_controller = self.application_controller,
+            navigation_callback=self.change_dataset
+        )
 
         # Clear the stack widget.
         [self.ui.stacked_widget.removeWidget(self.ui.stacked_widget.widget(0)) for _ in range(2)]
@@ -54,6 +60,7 @@ class SimulatorWidget(QMainWindow):
         self.ui.stacked_widget.addWidget(self.dataset_widget)
         self.ui.stacked_widget.addWidget(self.timetable_widget)
         self.ui.stacked_widget.addWidget(self.loader_widget)
+        self.ui.stacked_widget.addWidget(self.generator_widget)
         self.ui.stacked_widget.setCurrentIndex(2)
 
         self.ui.action_change_dataset.setShortcut('Ctrl+E')
@@ -68,12 +75,18 @@ class SimulatorWidget(QMainWindow):
         self.ui.action_timetable.setShortcut('Ctrl+T')
         self.ui.action_timetable.triggered.connect(self.on_timetable_click)
 
+        self.ui.action_create_dataset.setShortcut('Ctrl+N')
+        self.ui.action_create_dataset.triggered.connect(self.on_create_dataset_click)
+
     def on_change_dataset_click(self):
         self.ui.stacked_widget.setCurrentIndex(0)
 
     def on_create_timetable_click(self):
         self.ui.stacked_widget.setCurrentIndex(1)
 
+    def on_create_dataset_click(self):
+        self.ui.stacked_widget.setCurrentIndex(5)
+    
     def on_dataset_click(self):
         self.dataset_widget.on_students_button_click()
         self.timetable_widget.on_students_button_click()

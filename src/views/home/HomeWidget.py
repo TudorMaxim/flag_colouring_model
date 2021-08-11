@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
 from controller.ApplicationController import ApplicationController
+from utils.Helpers import Helpers
 from views.home.HomeUI import Ui_Home
 
 
@@ -37,12 +38,10 @@ class HomeWidget(QWidget):
     
     def start(self):
         if self.path == '':
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Critical)
-            msg.setText("Error: Invalid Dataset!")
-            msg.setInformativeText('Please select a valid JSON dataset using the BROWSE button.')
-            msg.setWindowTitle("Error")
-            msg.exec_()
+            Helpers.show_error_message(
+                message='Error: Invalid Dataset!',
+                informative_text='Please select a valid JSON dataset using the BROWSE button.'
+            )
         else:
             self.application_controller.change_dataset(self.path)
             self.__navigation_callback()

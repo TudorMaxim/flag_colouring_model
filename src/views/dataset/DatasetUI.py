@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dataset(object):
     def setupUi(self, Dataset):
         Dataset.setObjectName("Dataset")
-        Dataset.resize(1162, 400)
+        Dataset.resize(1162, 468)
         Dataset.setStyleSheet("QWidget#Dataset {\n"
 "    background: white;\n"
 "}\n"
@@ -71,15 +71,24 @@ class Ui_Dataset(object):
 "    border: 0px;\n"
 "}\n"
 "\n"
-"QListWidget::item {\n"
-"    font-size: 50px;\n"
+"QListWidget::item::selected {\n"
+"    background-color: red;\n"
+"    color: white;\n"
 "}")
         Dataset.setProperty("active", False)
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(Dataset)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.dataset_label = QtWidgets.QLabel(Dataset)
         self.dataset_label.setObjectName("dataset_label")
-        self.verticalLayout_4.addWidget(self.dataset_label)
+        self.horizontalLayout_2.addWidget(self.dataset_label)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
+        self.save_dataset_button = QtWidgets.QPushButton(Dataset)
+        self.save_dataset_button.setObjectName("save_dataset_button")
+        self.horizontalLayout_2.addWidget(self.save_dataset_button)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_2)
         self.list_layout = QtWidgets.QHBoxLayout()
         self.list_layout.setObjectName("list_layout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -95,8 +104,8 @@ class Ui_Dataset(object):
         self.courses_button.setProperty("cssClass", "")
         self.courses_button.setObjectName("courses_button")
         self.verticalLayout.addWidget(self.courses_button)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem1)
         self.list_layout.addLayout(self.verticalLayout)
         self.list_widget = QtWidgets.QListWidget(Dataset)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -144,8 +153,8 @@ class Ui_Dataset(object):
         self.edit_button = QtWidgets.QPushButton(self.details_groupbox)
         self.edit_button.setObjectName("edit_button")
         self.horizontalLayout.addWidget(self.edit_button)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem1)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem2)
         self.delete_button = QtWidgets.QPushButton(self.details_groupbox)
         self.delete_button.setObjectName("delete_button")
         self.horizontalLayout.addWidget(self.delete_button)
@@ -161,6 +170,8 @@ class Ui_Dataset(object):
         _translate = QtCore.QCoreApplication.translate
         Dataset.setWindowTitle(_translate("Dataset", "Form"))
         self.dataset_label.setText(_translate("Dataset", "Dataset: "))
+        self.save_dataset_button.setText(_translate("Dataset", "Save as JSON"))
+        self.save_dataset_button.setProperty("cssClass", _translate("Dataset", "active"))
         self.students_button.setText(_translate("Dataset", "Students"))
         self.students_button.setProperty("cssClass", _translate("Dataset", "active"))
         self.teachers_button.setText(_translate("Dataset", "Teachers"))
