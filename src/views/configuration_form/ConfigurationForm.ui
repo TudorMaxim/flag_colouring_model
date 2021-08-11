@@ -203,7 +203,7 @@ QPushButton:hover:!pressed {
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1027</width>
+        <width>279</width>
         <height>162</height>
        </rect>
       </property>
@@ -292,7 +292,7 @@ QPushButton:hover:!pressed {
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1027</width>
+        <width>307</width>
         <height>133</height>
        </rect>
       </property>

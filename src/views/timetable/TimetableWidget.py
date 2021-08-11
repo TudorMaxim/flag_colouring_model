@@ -1,12 +1,10 @@
-from typing import List, Callable, Optional
-from PyQt5.QtWidgets import QTableWidgetItem, QWidget, QListWidgetItem
+from typing import  Optional
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QListWidgetItem
 from controller.ApplicationController import ApplicationController
 from controller.TimetablingController import TimetablingController
-from utils.Helpers import Helpers
 from views.timetable.TimetableUI import Ui_Timetable
-from model.Teacher import Teacher
-from model.Student import Student
+from utils.Helpers import Helpers
 
 
 active_button = 'QPushButton {color: white; background-color: red;}'
@@ -23,25 +21,37 @@ class TimetableWidget(QWidget):
 
         self.ui.students_button.clicked.connect(self.on_students_button_click)
         self.ui.teachers_button.clicked.connect(self.on_teachers_button_click)
+        self.ui.export_button.clicked.connect(self.on_export_button_click)
 
         self.ui.list_widget.itemClicked.connect(self.__on_student_click)
-        self.__populate(
+        Helpers.populate(
+            list_widget=self.ui.list_widget,
             entities=self.application_controller.students_repository.get_list(),
-            mapper=self.__map_student_to_list_item
+            mapper=Helpers.map_student_to_list_item
         )
 
-    def __populate(self, entities: List, mapper: Callable):
-        items = list(map(mapper, entities))
-        self.ui.list_widget.clear()
-        for item in items:
-            self.ui.list_widget.addItem(item)
+    def on_export_button_click(self):
+        if self.timetabling_controller.colouring is None:
+            Helpers.show_error_message(
+                message='Error: Could not export the timetable!',
+                informative_text='Please create the timetable before trying to export it.'
+            )
+            return
+        try:
+            self.ui.export_button.setEnabled(False)
+            path = QFileDialog.getSaveFileName(self, 'Save Timetable', '*.csv')
+            self.timetabling_controller.export_to_csv(path=path[0])
+            self.ui.export_button.setEnabled(True)
+        except FileNotFoundError:
+            self.ui.export_button.setEnabled(True)
 
     def on_students_button_click(self):
         self.ui.teachers_button.setStyleSheet(inactive_button)
         self.ui.students_button.setStyleSheet(active_button)
-        self.__populate(
-            entities=self.application_controller.students_repository.get_list(),
-            mapper=self.__map_student_to_list_item
+        Helpers.populate(
+            list_widget=self.ui.list_widget,
+            entities=self.application_controller.get_students().values(),
+            mapper=Helpers.map_student_to_list_item
         )
         self.ui.list_widget.itemClicked.disconnect()
         self.ui.list_widget.itemClicked.connect(self.__on_student_click)
@@ -50,25 +60,14 @@ class TimetableWidget(QWidget):
     def on_teachers_button_click(self):
         self.ui.students_button.setStyleSheet(inactive_button)
         self.ui.teachers_button.setStyleSheet(active_button)
-        self.__populate(
-            entities=self.application_controller.teachers_repository.get_list(),
-            mapper=self.__map_teacher_to_list_item
+        Helpers.populate(
+            list_widget=self.ui.list_widget,
+            entities=self.application_controller.get_teachers().values(),
+            mapper=Helpers.map_teacher_to_list_item
         )
         self.ui.list_widget.itemClicked.disconnect()
         self.ui.list_widget.itemClicked.connect(self.__on_teacher_click)
         self.__clear_timetable_widget()
-
-    def __map_student_to_list_item(self, student: Student) -> QListWidgetItem:
-        item = QListWidgetItem()
-        item.setText(student.name)
-        item.setData(Qt.UserRole, student)
-        return item
-
-    def __map_teacher_to_list_item(self, teacher: Teacher) -> QListWidgetItem:
-        item = QListWidgetItem()
-        item.setText(teacher.name)
-        item.setData(Qt.UserRole, teacher)
-        return item
 
     def __on_student_click(self, item: QListWidgetItem) -> None:
         student = item.data(Qt.UserRole)

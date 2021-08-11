@@ -9,7 +9,8 @@ class CoursesRepository:
         self.courses = Helpers.build_ids_map(Course.from_json(path=dataset))
     
     def add(self, name: str, teacher_id: int) -> None:
-        course_id = 1 + max(self.courses, key=lambda course: course.id).id
+        course_with_max_id = max(self.courses.values(), key=lambda course: course.id)
+        course_id = 1 + course_with_max_id.id
         course = Course(id=course_id, name=name, teacher_id=teacher_id)
         self.courses[course_id] = course
 

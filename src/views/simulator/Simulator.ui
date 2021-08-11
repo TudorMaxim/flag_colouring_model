@@ -88,9 +88,25 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <widget class="QMenu" name="menu_new">
+     <property name="title">
+      <string>New</string>
+     </property>
+     <addaction name="action_add_student"/>
+     <addaction name="action_add_teacher"/>
+     <addaction name="action_add_course"/>
+    </widget>
+    <widget class="QMenu" name="menu_create">
+     <property name="title">
+      <string>Create</string>
+     </property>
+     <addaction name="create_dataset_action"/>
+     <addaction name="create_timetable_action"/>
+    </widget>
     <addaction name="separator"/>
+    <addaction name="menu_new"/>
+    <addaction name="menu_create"/>
     <addaction name="action_change_dataset"/>
-    <addaction name="action_create_timetable"/>
    </widget>
    <widget class="QMenu" name="menu_view">
     <property name="title">
@@ -118,9 +134,34 @@
     <string>Timetable</string>
    </property>
   </action>
-  <action name="action_create_timetable">
+  <action name="action_create_dataset">
    <property name="text">
-    <string>Create Timetable</string>
+    <string>Create Dataset</string>
+   </property>
+  </action>
+  <action name="action_add_student">
+   <property name="text">
+    <string>Student</string>
+   </property>
+  </action>
+  <action name="action_add_teacher">
+   <property name="text">
+    <string>Teacher</string>
+   </property>
+  </action>
+  <action name="action_add_course">
+   <property name="text">
+    <string>Course</string>
+   </property>
+  </action>
+  <action name="create_dataset_action">
+   <property name="text">
+    <string>Dataset</string>
+   </property>
+  </action>
+  <action name="create_timetable_action">
+   <property name="text">
+    <string>Timetable</string>
    </property>
   </action>
  </widget>

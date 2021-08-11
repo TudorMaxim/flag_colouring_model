@@ -1,5 +1,5 @@
 LOADING_SPINNER_ANIMATION = './assets/loading_spinner.gif'
-DEFAULT_DATASET = './datasets/dataset_c8_s12_t3_r8.json'
+DEFAULT_DATASET = './datasets/dataset_c8_s12_t3.json'
 POPULATION_CNT = 100
 GENERATIONS_CNT = 100
 MUTATION_PROBABILITY = 60

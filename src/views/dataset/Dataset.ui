@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1028</width>
-    <height>565</height>
+    <width>1162</width>
+    <height>468</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,21 +55,63 @@ QGroupBox {
 	font-weight: bold;
 }
 
-</string>
+QPushButton#delete_button, QPushButton#edit_button {
+	max-width: 75px;
+}
+
+
+QListWidget {
+	border: 1px solid silver;
+	border-radius: 5px;
+}
+
+QListWidget#courses_list_widget {
+	margin-top: 8px;
+	border: 0px;
+}
+
+QListWidget::item::selected {
+	background-color: red;
+	color: white;
+}</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
+  <property name="active" stdset="0">
+   <bool>false</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
-    <widget class="QLabel" name="dataset_label">
-     <property name="text">
-      <string>Dataset: </string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="dataset_label">
+       <property name="text">
+        <string>Dataset: </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="save_dataset_button">
+       <property name="text">
+        <string>Save as JSON</string>
+       </property>
+       <property name="cssClass" stdset="0">
+        <string>active</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="list_layout">
@@ -131,7 +173,7 @@ QGroupBox {
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="details_groupbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -141,6 +183,83 @@ QGroupBox {
        <property name="title">
         <string>Details</string>
        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="1" column="0">
+           <widget class="QLabel" name="name_info_label">
+            <property name="text">
+             <string>Name: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="id_info_label">
+            <property name="text">
+             <string>ID:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="courses_list_label">
+            <property name="text">
+             <string>Courses:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QListWidget" name="courses_list_widget"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="id_input"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="name_input"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetFixedSize</enum>
+            </property>
+            <item>
+             <widget class="QPushButton" name="edit_button">
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="delete_button">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+              <property name="cssClass" stdset="0">
+               <string>active</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>

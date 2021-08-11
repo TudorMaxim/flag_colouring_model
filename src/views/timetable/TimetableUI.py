@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Timetable(object):
     def setupUi(self, Timetable):
         Timetable.setObjectName("Timetable")
-        Timetable.resize(1158, 537)
+        Timetable.resize(1181, 559)
         Timetable.setStyleSheet("QWidget#Timetable {\n"
 "    background: white;\n"
 "}\n"
@@ -48,16 +48,38 @@ class Ui_Timetable(object):
 "    background-color: #EC3812;\n"
 "}\n"
 "\n"
+"QTableWidget {\n"
+"    border: 1px solid silver;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
 "QTableWidget::item {\n"
 "    min-width: 200px;\n"
 "    min-height: 100px;\n"
+"}\n"
+"\n"
+"QListWidget {\n"
+"    border: 1px solid silver;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QListWidget::item::selected {\n"
+"    background-color: red;\n"
+"    color: white;\n"
 "}")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Timetable)
-        self.verticalLayout_2.setContentsMargins(0, -1, 0, -1)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.timetable_label = QtWidgets.QLabel(Timetable)
         self.timetable_label.setObjectName("timetable_label")
-        self.verticalLayout_2.addWidget(self.timetable_label)
+        self.horizontalLayout_2.addWidget(self.timetable_label)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
+        self.export_button = QtWidgets.QPushButton(Timetable)
+        self.export_button.setObjectName("export_button")
+        self.horizontalLayout_2.addWidget(self.export_button)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -69,8 +91,8 @@ class Ui_Timetable(object):
         self.teachers_button.setProperty("cssClass", "")
         self.teachers_button.setObjectName("teachers_button")
         self.verticalLayout.addWidget(self.teachers_button)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem1)
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.list_widget = QtWidgets.QListWidget(Timetable)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
@@ -129,6 +151,8 @@ class Ui_Timetable(object):
         _translate = QtCore.QCoreApplication.translate
         Timetable.setWindowTitle(_translate("Timetable", "Form"))
         self.timetable_label.setText(_translate("Timetable", "Timetable:"))
+        self.export_button.setText(_translate("Timetable", "Export to CSV"))
+        self.export_button.setProperty("cssClass", _translate("Timetable", "active"))
         self.students_button.setText(_translate("Timetable", "Students"))
         self.students_button.setProperty("cssClass", _translate("Timetable", "active"))
         self.teachers_button.setText(_translate("Timetable", "Teachers"))

@@ -1,3 +1,4 @@
+import csv
 from typing import List
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
@@ -26,6 +27,9 @@ class TimetablingController:
         )
         self.is_running = False
         self.colouring = None
+        self.x_axis = None
+        self.best_fitness_y_axis = None
+        self.average_fitness_y_axis = None
 
     def set_algorithm(
         self,
@@ -67,7 +71,10 @@ class TimetablingController:
     
     def schedule(self) -> dict[int, int]:
         self.is_running = True
-        self.colouring = self.algorithm.run(self.colour_set)
+        if isinstance(self.algorithm, EvolutionaryAlgorithm):
+            self.colouring, self.x_axis, self.best_fitness_y_axis, self.average_fitness_y_axis = self.algorithm.run(self.colour_set)
+        else:
+            self.colouring = self.algorithm.run(self.colour_set)
         self.is_running = False
         return self.colouring
     
@@ -86,3 +93,17 @@ class TimetablingController:
         for course_id in course_ids:
             timetable[course_id] = self.colouring[course_id]
         return timetable
+
+    def export_to_csv(self, path: str) -> None:
+        if self.colouring is None:
+            return
+        header = ['Course ID', 'Course Name', 'Scheduled']
+        with open(path, 'w', encoding='UTF8', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(header)
+            data = [[
+                course.id,
+                course.name,
+                Helpers.map_colour_to_timeslot(self.colouring[course.id])
+            ] for course in self.courses.values()]
+            writer.writerows(data)
