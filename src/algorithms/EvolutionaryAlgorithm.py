@@ -32,7 +32,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         teachers_map: dict[int, Teacher] = None,
         courses_map: dict[int, Course] = None,
         population_model: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.GENERATIONAL_POPULATION,
-        selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION
+        selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION,
     ) -> None:
         super().__init__(graph, students_map, teachers_map, courses_map)
         self.generations_cnt = Constants.GENERATIONS_CNT
@@ -40,6 +40,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         self.mutation_probability = Constants.MUTATION_PROBABILITY
         self.population_model = population_model
         self.selection_method = selection_method
+        self.debug = False # used to plot the evolution of the population.
     
     def __heuristic_task(self, algorithm: AbstractColouringAlgorithm, colours_set: List, results: List, index: int) -> None:
         results[index] = algorithm.run(colours_set)
@@ -109,7 +110,8 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
                     population[i].single_colour_mutation(probability=100, colour_set=colours_set)
         
         diversity = self.__get_population_diverstity_ratio(population)
-        print(f'Population diversity ratio: {diversity}\n')
+        if self.debug:
+            print(f'Population diversity ratio: {diversity}\n')
         return list(map(lambda chromosome: (chromosome, chromosome.fitness()), population))
 
     # Roulette Wheel selection
@@ -185,16 +187,18 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
             best_fitness_y_axis.append(fitness)
             avegare_fitness_y_axis.append(self.__get_average_fitness(population))
 
-            print(f'Generation {generation}')
-            print(f'Best fitness: {fitness}\n')
+            if self.debug:
+                print(f'Generation {generation}')
+                print(f'Best fitness: {fitness}\n')
         
-        plt.plot(x_axis, best_fitness_y_axis)
-        plt.plot(x_axis, avegare_fitness_y_axis)
-        plt.legend(['Best Fitness', 'Average Fitness'], loc='upper right')
-        plt.xlabel('Generation')
-        plt.ylabel('Fitness')
-        plt.title('Evolution of the population and its best individual')
-        # plt.show()
+        if self.debug:
+            plt.plot(x_axis, best_fitness_y_axis)
+            plt.plot(x_axis, avegare_fitness_y_axis)
+            plt.legend(['Best Fitness', 'Average Fitness'], loc='upper right')
+            plt.xlabel('Generation')
+            plt.ylabel('Fitness')
+            plt.title('Evolution of the population and its best individual')
+            plt.show()
         return best.get_colouring()
 
     # Generational population
@@ -223,21 +227,25 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
                 fitness = current_fitness
             best_fitness_y_axis.append(fitness)
             avegare_fitness_y_axis.append(self.__get_average_fitness(population))
-            print(f'Generation {generation}')
-            print(f'Best fitness: {fitness}\n')
+            if self.debug:
+                print(f'Generation {generation}')
+                print(f'Best fitness: {fitness}\n')
         
-        plt.plot(x_axis, best_fitness_y_axis)
-        plt.plot(x_axis, avegare_fitness_y_axis)
-        plt.legend(['Best Fitness', 'Average Fitness'], loc='upper right')
-        plt.xlabel('Generation')
-        plt.ylabel('Fitness')
-        plt.title('Evolution of the population and its best individual')
-        # plt.show()
+        if self.debug:
+            plt.plot(x_axis, best_fitness_y_axis)
+            plt.plot(x_axis, avegare_fitness_y_axis)
+            plt.legend(['Best Fitness', 'Average Fitness'], loc='upper right')
+            plt.xlabel('Generation')
+            plt.ylabel('Fitness')
+            plt.title('Evolution of the population and its best individual')
+            plt.show()
+        
         return best.get_colouring()
 
     def run(self, colours_set: List) -> dict:
-        print(f'Using a {self.population_model.value} population with {self.population_cnt} individuals.')
-        print(f'Using {self.selection_method.value} selection.\n')
+        if self.debug:
+            print(f'Using a {self.population_model.value} population with {self.population_cnt} individuals.')
+            print(f'Using {self.selection_method.value} selection.\n')
         if self.population_model == EvolutionaryAlgorithmConfig.STEADY_STATE_POPULATION:
             return self.__steady_state(colours_set)
         elif self.population_model == EvolutionaryAlgorithmConfig.GENERATIONAL_POPULATION:

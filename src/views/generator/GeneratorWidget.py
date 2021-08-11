@@ -33,6 +33,7 @@ class GeneratorWidget(QWidget):
             courses = int(self.ui.courses_input.text())
             min_enrolment = int(self.ui.min_enrolment_input.text())
             max_enrolment = int(self.ui.max_entolment_input.text())
+            self.ui.generate_button.setEnabled(False)
             dataset = self.application_controller.generate_dataset(
                 s=students,
                 t=teachers,
@@ -43,13 +44,16 @@ class GeneratorWidget(QWidget):
             path = QFileDialog.getSaveFileName(self, 'Save Dataset', '*.json')
             self.application_controller.save_dataset(dataset, path[0])
             self.application_controller.change_dataset(dataset=path[0])
+            self.ui.generate_button.setEnabled(True)
             self.navigation_callback()
         except ValueError:
+            self.ui.generate_button.setEnabled(True)
             Helpers.show_error_message(
                 message='Error: invalid form!',
                 informative_text='Please fill in all the inputs or leave the default values.'
             )
         except AssertionError as err:
+            self.ui.generate_button.setEnabled(True)
             Helpers.show_error_message(
                 message='Error: invalid input',
                 informative_text=str(err)

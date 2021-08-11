@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, BooleanOptionalAction
 from datetime import datetime
 from model.Student import Student
 from model.Teacher import Teacher
@@ -59,6 +59,13 @@ def setup_parser() -> ArgumentParser:
         choices=['roulette_wheel', 'tournament'],
         help='Selection method to be used for the evolutionary algorithm'
     )
+    parser.add_argument(
+        '--debug',
+        '-D',
+        default=False,
+        action=BooleanOptionalAction,
+        help='Debug mode: the evolutionary algorithm will plot its progress.'
+    )
     return parser
 
 
@@ -91,6 +98,7 @@ if __name__ == '__main__':
         colouring_algorithm.mutation_probability = int(args.mutation)
         colouring_algorithm.population_model = EvolutionaryAlgorithmConfig(args.model)
         colouring_algorithm.selection_method = EvolutionaryAlgorithmConfig(args.selection)
+        colouring_algorithm.debug = args.debug
     
     print(f'\nExecuting algorithm: {args.algorithm}\n')
 
