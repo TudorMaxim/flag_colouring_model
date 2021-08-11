@@ -12,17 +12,17 @@ from utils.Helpers import Helpers
 
 
 class ApplicationController:
-    def __init__(self, dataset: str = Constants.DEFAULT_DATASET) -> None:
-        self.dataset = dataset
-        self.students_repository = StudentsRepository(dataset)
-        self.teachers_repository = TeachersRepository(dataset)
-        self.courses_repository = CoursesRepository(dataset)
+    def __init__(self, dataset_path: str = Constants.DEFAULT_DATASET) -> None:
+        self.dataset_path = dataset_path
+        self.students_repository = StudentsRepository(dataset_path)
+        self.teachers_repository = TeachersRepository(dataset_path)
+        self.courses_repository = CoursesRepository(dataset_path)
     
-    def change_dataset(self, dataset: str) -> None:
-        self.dataset = dataset
-        self.students_repository.change_dataset(dataset)
-        self.teachers_repository.change_dataset(dataset)
-        self.courses_repository.change_dataset(dataset)
+    def change_dataset(self, dataset_path: str) -> None:
+        self.dataset_path = dataset_path
+        self.students_repository.change_dataset(dataset_path)
+        self.teachers_repository.change_dataset(dataset_path)
+        self.courses_repository.change_dataset(dataset_path)
 
     def get_students(self) -> dict[int, Student]:
         return self.students_repository.students
@@ -124,3 +124,12 @@ class ApplicationController:
         with open(path, 'w') as file:
             json.dump(dataset, file, indent=4)
     
+    def get_dataset(self) -> dict:
+        students = list(map(lambda x: vars(x), self.students_repository.get_list()))
+        teachers = list(map(lambda x: vars(x), self.teachers_repository.get_list()))
+        courses = list(map(lambda x: vars(x), self.courses_repository.get_list()))
+        return {
+            'students': students,
+            'teachers': teachers,
+            'courses': courses
+        }

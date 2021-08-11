@@ -19,7 +19,7 @@ class SimulatorWidget(QMainWindow):
         self.ui = Ui_Simulator()
         self.ui.setupUi(self)
 
-        self.application_controller = ApplicationController(dataset=Constants.DEFAULT_DATASET)
+        self.application_controller = ApplicationController(dataset_path=Constants.DEFAULT_DATASET)
         self.timetabling_controller = TimetablingController(
             students=self.application_controller.get_students(),
             teachers=self.application_controller.get_teachers(),

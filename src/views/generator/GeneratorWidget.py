@@ -43,7 +43,7 @@ class GeneratorWidget(QWidget):
             )
             path = QFileDialog.getSaveFileName(self, 'Save Dataset', '*.json')
             self.application_controller.save_dataset(dataset, path[0])
-            self.application_controller.change_dataset(dataset=path[0])
+            self.application_controller.change_dataset(dataset_path=path[0])
             self.ui.generate_button.setEnabled(True)
             self.navigation_callback()
         except ValueError:

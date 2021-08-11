@@ -27,6 +27,7 @@ class DatasetWidget(QWidget):
         self.ui.students_button.clicked.connect(self.on_students_button_click)
         self.ui.teachers_button.clicked.connect(self.on_teachers_button_click)
         self.ui.courses_button.clicked.connect(self.on_courses_button_click)
+        self.ui.save_dataset_button.clicked.connect(self.on_save_button_click)
 
         self.ui.list_widget.itemClicked.connect(self.__on_student_click)
         self.__populate(
@@ -41,6 +42,10 @@ class DatasetWidget(QWidget):
         for item in items:
             list_widget.addItem(item)
 
+    def on_save_button_click(self):
+        dataset = self.application_controller.get_dataset()
+        self.application_controller.save_dataset(dataset=dataset, path=self.application_controller.dataset_path)
+        
     def on_students_button_click(self):
         self.ui.courses_button.setStyleSheet(inactive_button)
         self.ui.teachers_button.setStyleSheet(inactive_button)
