@@ -1,7 +1,8 @@
+import pyqtgraph as pg
 from PyQt5.QtCore import QThreadPool
 from PyQt5.QtGui import QIntValidator
-from PyQt5.QtWidgets import QStackedWidget, QWidget
-from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithmConfig
+from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QVBoxLayout, QWidget
+from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
 from controller.TimetablingController import TimetablingController
 from utils.Helpers import Helpers
 from views.configuration_form.ConfigurationFormUI import Ui_ConfigurationForm
@@ -14,6 +15,18 @@ class ConfigurationFormWidget(QWidget):
         self.ui = Ui_ConfigurationForm()
         self.ui.setupUi(self)
         
+        self.plot_window = QWidget()
+        self.plot_window.setWindowTitle('Results for the Evolutionary Algotithm')
+        self.plot_layout = QVBoxLayout()
+        self.plot_widget = pg.PlotWidget()
+        self.plot_widget.setTitle('Evolution of the population and its best individual')
+        self.plot_widget.setBackground('w')
+        self.plot_widget.setLabel('left', 'Fitness')
+        self.plot_widget.setLabel('bottom', 'Generation')
+        self.plot_widget.addLegend()
+        self.plot_layout.addWidget(self.plot_widget)
+        self.plot_window.setLayout(self.plot_layout)
+
         self.thread_pool = QThreadPool()
         self.worker = None
         self.timetabling_controller = timetabling_controller
@@ -76,7 +89,24 @@ class ConfigurationFormWidget(QWidget):
         self.stacked_widget.setCurrentIndex(4)
 
     def finished(self) -> None:
+        if isinstance(self.timetabling_controller.algorithm, EvolutionaryAlgorithm):
+            self.plot_widget.clear()
+            self.plot_widget.plot(
+                self.timetabling_controller.x_axis,
+                self.timetabling_controller.best_fitness_y_axis,
+                name='Best Fitness',
+                pen=pg.mkPen(color='r', width=2)
+            )
+            self.plot_widget.plot(
+                self.timetabling_controller.x_axis,
+                self.timetabling_controller.average_fitness_y_axis,
+                name='Average Fitness',
+                pen=pg.mkPen(color='b', width=2)
+            )
+            self.plot_window.show()
+
         self.stacked_widget.setCurrentIndex(3)
+
 
     def error(self) -> None:
         self.stacked_widget.setCurrentIndex(3)

@@ -161,7 +161,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
 
     # Steady State EA - 2 parents are selected to produce offspring
     # The offspring replace the parents if their fitness is better. 
-    def __steady_state(self, colours_set: List[int]) -> dict[int, int]:
+    def __steady_state(self, colours_set: List[int]) -> Tuple[dict[int, int], List, List, List]:
         population = self.__generate_population(colours_set)
         best, fitness = self.__get_best(population)
         x_axis = [i for i in range(0, self.generations_cnt + 1)]
@@ -199,11 +199,11 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
             plt.ylabel('Fitness')
             plt.title('Evolution of the population and its best individual')
             plt.show()
-        return best.get_colouring()
+        return best.get_colouring(), x_axis, best_fitness_y_axis, avegare_fitness_y_axis
 
     # Generational population
     # At each generation, the entire population is replaced with the offspring   
-    def __generational(self, colours_set: List[int]) -> dict[int, int]:
+    def __generational(self, colours_set: List[int]) -> Tuple[dict[int, int], List, List, List]:
         population = self.__generate_population(colours_set)
         best, fitness = self.__get_best(population)
         x_axis = [i for i in range(0, self.generations_cnt + 1)]
@@ -240,9 +240,9 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
             plt.title('Evolution of the population and its best individual')
             plt.show()
         
-        return best.get_colouring()
+        return best.get_colouring(), x_axis, best_fitness_y_axis, avegare_fitness_y_axis
 
-    def run(self, colours_set: List) -> dict:
+    def run(self, colours_set: List) -> Tuple[dict[int, int], List, List, List]:
         if self.debug:
             print(f'Using a {self.population_model.value} population with {self.population_cnt} individuals.')
             print(f'Using {self.selection_method.value} selection.\n')

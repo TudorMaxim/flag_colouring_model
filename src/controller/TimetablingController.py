@@ -27,6 +27,9 @@ class TimetablingController:
         )
         self.is_running = False
         self.colouring = None
+        self.x_axis = None
+        self.best_fitness_y_axis = None
+        self.average_fitness_y_axis = None
 
     def set_algorithm(
         self,
@@ -68,7 +71,10 @@ class TimetablingController:
     
     def schedule(self) -> dict[int, int]:
         self.is_running = True
-        self.colouring = self.algorithm.run(self.colour_set)
+        if isinstance(self.algorithm, EvolutionaryAlgorithm):
+            self.colouring, self.x_axis, self.best_fitness_y_axis, self.average_fitness_y_axis = self.algorithm.run(self.colour_set)
+        else:
+            self.colouring = self.algorithm.run(self.colour_set)
         self.is_running = False
         return self.colouring
     
