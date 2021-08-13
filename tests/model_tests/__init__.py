@@ -1,0 +1,4 @@
+from model_tests.StudentTests import StudentTests
+from model_tests.TeacherTests import TeacherTests
+from model_tests.CourseTests import CourseTests
+from model_tests.GraphTests import GraphTests

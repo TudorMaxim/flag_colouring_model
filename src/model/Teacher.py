@@ -14,9 +14,11 @@ class Teacher(Person):
     def from_json(path=Constants.DEFAULT_DATASET):
         f = open(path, 'r')
         data = json.load(f)
-        return [Teacher(
+        teachers = [Teacher(
             teacher['id'],
             teacher['name'],
             teacher['course_ids'],
             teacher['weights']
             ) for teacher in data['teachers']]
+        f.close()
+        return teachers
