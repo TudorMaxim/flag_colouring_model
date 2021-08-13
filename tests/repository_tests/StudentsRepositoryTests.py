@@ -9,17 +9,18 @@ from repository.StudentsRepository import StudentsRepository
 class StudentRepositoryTests(unittest.TestCase):
     def setUp(self) -> None:
         self.repository = StudentsRepository(dataset='tests/mock_data.json')
-    
+        self.student_name = 'Tudor Maxim'
+
     def test_add(self):
         self.assertEqual(len(self.repository.get_list()), 5)
-        self.repository.add(name='Tudor Maxim', course_ids=[1, 2, 3])
+        self.repository.add(name=self.student_name, course_ids=[1, 2, 3])
         self.assertEqual(len(self.repository.get_list()), 6)
     
     def test_find_by_id(self):
         student = self.repository.find(id=1)
         self.assertIsInstance(student, Student)
         self.assertEqual(student.id, 1)
-        self.assertEqual(student.name, 'Tudor Maxim')
+        self.assertEqual(student.name, self.student_name)
         self.assertEqual(student.course_ids, [1, 4])
         nobody = self.repository.find(id=1000)
         self.assertNotIsInstance(nobody, Student)
@@ -34,13 +35,13 @@ class StudentRepositoryTests(unittest.TestCase):
         student = self.repository.find(id=1)
         self.assertIsInstance(student, Student)
         self.assertEqual(student.id, 1)
-        self.assertEqual(student.name, 'Tudor Maxim')
+        self.assertEqual(student.name, self.student_name)
         self.assertEqual(student.course_ids, [1, 4])
-        self.repository.update(student=Student(id=1, name='TUDOR MAXIM', course_ids=[1]))
+        self.repository.update(student=Student(id=1, name='MR. ' + self.student_name, course_ids=[1]))
         student = self.repository.find(id=1)
         self.assertIsInstance(student, Student)
         self.assertEqual(student.id, 1)
-        self.assertEqual(student.name, 'TUDOR MAXIM')
+        self.assertEqual(student.name, 'MR. ' + self.student_name)
         self.assertEqual(student.course_ids, [1])
 
     def test_get_list(self):

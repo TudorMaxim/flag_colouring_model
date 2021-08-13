@@ -108,8 +108,12 @@ if __name__ == '__main__':
     colouring = colouring_algorithm.run(colours_set)
     elapsed = datetime.now() - start_time
 
-    Helpers.print_timetable(courses, colouring)
+    timetable = colouring
+    if isinstance(colouring_algorithm, EvolutionaryAlgorithm):
+        timetable = colouring[0]
+    
+    Helpers.print_timetable(courses, timetable)
 
-    print(f'Used colours: {Helpers.get_used_colours_count(colouring)}')
+    print(f'Used colours: {Helpers.get_used_colours_count(timetable)}')
 
     print(f'\n\nElapsed time: {elapsed.total_seconds() * 1000} ms')

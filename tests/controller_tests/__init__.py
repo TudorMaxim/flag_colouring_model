@@ -1,0 +1,2 @@
+from controller_tests.ApplicationControllerTests import ApplicationControllerTests
+from controller_tests.TimetablingControllerTests import TimetablingControllerTests
