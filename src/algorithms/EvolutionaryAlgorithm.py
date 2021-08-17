@@ -56,6 +56,9 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
     def __get_best(self, population: List[Tuple[Chromosome, float]]) -> Tuple[Chromosome, float]:
        return min(population, key=lambda pair: pair[1])
 
+    def __get_worst(self, population: List[Tuple[Chromosome, float]]) -> Tuple[Chromosome, float]:
+        return max(population, key=lambda pair: pair[1])
+    
     # Function that generates a population of valid solutions
     def __generate_population(self, colours_set: List[int]) -> List[Tuple[Chromosome, float]]:
         heuristics = [
@@ -148,19 +151,19 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
 
     # The method selects 2 parents using eather roulette wheel or tournament approach.
     # Returns 2 Chromosome objects and their indices.
-    def __selection(self, population: List[Tuple[Chromosome, float]]) -> Tuple[Chromosome, int, Chromosome, int]:
+    def __selection(self, population: List[Tuple[Chromosome, float]]) -> Tuple[Chromosome, Chromosome]:
         if self.selection_method == EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION:
             chosen = [False for _ in population]
             parent1, i = self.__roulette_wheel(population, chosen)
             chosen[i] = True
-            parent2, j = self.__roulette_wheel(population, chosen)
+            parent2, _ = self.__roulette_wheel(population, chosen)
         else:
-            parent1, i = self.__tournament(population)
-            parent2, j = self.__tournament(population)
-        return parent1, i, parent2, j
+            parent1, _ = self.__tournament(population)
+            parent2, _ = self.__tournament(population)
+        return parent1, parent2
 
     # Steady State EA - 2 parents are selected to produce offspring
-    # The offspring replace the parents if their fitness is better. 
+    # The offspring replace the worst individuals if their fitness is better. 
     def __steady_state(self, colours_set: List[int]) -> Tuple[dict[int, int], List, List, List]:
         population = self.__generate_population(colours_set)
         best, fitness = self.__get_best(population)
@@ -168,25 +171,32 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         best_fitness_y_axis = [fitness]
         avegare_fitness_y_axis = [self.__get_average_fitness(population)]
         for generation in range(self.generations_cnt):
-            parent1, i, parent2, j = self.__selection(population)
+            parent1, parent2 = self.__selection(population)
             offspring1, offspring2 = parent1.crossover(parent2)
             offspring1.mutate(self.mutation_probability, colours_set)
             offspring2.mutate(self.mutation_probability, colours_set)
 
+            # Get the worst 2 solutions
+            candidate1, fitness1 = self.__get_worst(population)
+            population.remove((candidate1, fitness1))
+            candidate2, fitness2 = self.__get_worst(population)
+            population.remove((candidate2, fitness2))
+            
             # Keep only the best 2 solutions in the population
             options = sorted([
                 (offspring1, offspring1.fitness()),
                 (offspring2, offspring2.fitness()),
-                population[i],
-                population[j]
+                (candidate1, fitness1),
+                (candidate2, fitness2)
             ], key=lambda pair: pair[1])
-            population[i] = options[0]
-            population[j] = options[1]
+            population.append(options[0])
+            population.append(options[1])
+            assert(len(population) == Constants.POPULATION_CNT)
 
             best, fitness = self.__get_best(population)
             best_fitness_y_axis.append(fitness)
             avegare_fitness_y_axis.append(self.__get_average_fitness(population))
-
+            
             if self.debug:
                 print(f'Generation {generation}')
                 print(f'Best fitness: {fitness}\n')

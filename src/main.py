@@ -79,7 +79,7 @@ if __name__ == '__main__':
     teachers = Helpers.build_ids_map(Teacher.from_json(args.dataset))
     courses = Helpers.build_ids_map(Course.from_json(args.dataset))
     conflict_graph = Conflicts.build_graph(list(students.values()), list(teachers.values()))
-    
+    print(f'Graph Density: {conflict_graph.density()}\n')
     options = {
         'ldo': LargestDegreeOrdering,
         'dsatur': DegreeOfSaturation,
