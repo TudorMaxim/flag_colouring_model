@@ -1,10 +1,11 @@
 import pyqtgraph as pg
 from PyQt5.QtCore import QThreadPool
 from PyQt5.QtGui import QIntValidator
-from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QStackedWidget, QVBoxLayout, QWidget
 from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
 from controller.TimetablingController import TimetablingController
 from utils.Helpers import Helpers
+from views.colouring.ColouringWidget import ColouringWidget
 from views.configuration_form.ConfigurationFormUI import Ui_ConfigurationForm
 from workers.TimetablingWorker import TimetablingWorker
 
@@ -31,6 +32,7 @@ class ConfigurationFormWidget(QWidget):
         self.worker = None
         self.timetabling_controller = timetabling_controller
         self.stacked_widget = stacked_widget
+        self.colouring_widget = ColouringWidget(parent=None, colouring=None, graph=None)
 
         self.ui.algorithm_combo_box.currentIndexChanged.connect(self.on_algorithm_combo_box_change)
         self.toggle_advanced_options(algorithm=str(self.ui.algorithm_combo_box.currentText()))
@@ -104,7 +106,13 @@ class ConfigurationFormWidget(QWidget):
                 pen=pg.mkPen(color='b', width=2)
             )
             self.plot_window.show()
-
+        
+        colouring = self.timetabling_controller.colouring
+        graph = self.timetabling_controller.conflict_graph
+        if len(colouring) <= 20:
+            self.colouring_widget.clear()
+            self.colouring_widget.draw(colouring, graph)
+            self.colouring_widget.show()
         self.stacked_widget.setCurrentIndex(3)
 
 
