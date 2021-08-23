@@ -1,7 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
-from views.home.HomeWidget import HomeWidget
 from views.simulator.SimulatorWidget import SimulatorWidget
 
 def main():

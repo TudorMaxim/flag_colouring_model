@@ -34,14 +34,14 @@ class ApplicationController:
     def get_courses(self) -> dict[int, Course]:
         return self.courses_repository.courses
 
-    def get_student(self, student_id: int) -> Student:
-        return self.students_repository.students[student_id]
+    def get_student(self, student_id: int) -> Optional[Student]:
+        return self.students_repository.students.get(student_id)
     
-    def get_teacher(self, teacher_id: int) -> Teacher:
-        return self.teachers_repository.teachers[teacher_id]
+    def get_teacher(self, teacher_id: int) -> Optional[Teacher]:
+        return self.teachers_repository.teachers.get(teacher_id)
     
-    def get_course(self, course_id: int) -> Course:
-        return self.courses_repository.courses[course_id]
+    def get_course(self, course_id: int) -> Optional[Course]:
+        return self.courses_repository.courses.get(course_id)
     
     def get_courses_for(self, person: Person) -> dict[int, Course]:
         courses = self.get_courses()
@@ -51,7 +51,9 @@ class ApplicationController:
                 filtered[id] = courses[id]
         return filtered
 
-    def get_teacher_of(self, course: Course) -> Teacher:
+    def get_teacher_of(self, course: Optional[Course]) -> Optional[Teacher]:
+        if course is None:
+            return None
         for teacher in self.get_teachers().values():
             if teacher.id == course.teacher_id:
                 return teacher
@@ -96,11 +98,11 @@ class ApplicationController:
             self.students_repository.remove(entity.id)
         elif isinstance(entity, Teacher):
             self.teachers_repository.remove(entity.id)
-        elif isinstance(entity, Course):
-            self.courses_repository.remove(entity.id)
             for course in self.get_courses().values():
                 if course.teacher_id == entity.id:
                     course.teacher_id = None
+        elif isinstance(entity, Course):
+            self.courses_repository.remove(entity.id)
             for student in self.get_students().values():
                 if entity.id in student.course_ids:
                     student.course_ids.remove(entity.id)

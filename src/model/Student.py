@@ -13,4 +13,6 @@ class Student(Person):
     def from_json(path=Constants.DEFAULT_DATASET):
         f = open(path, 'r')
         data = json.load(f)
-        return [Student(student['id'], student['name'], student['course_ids']) for student in data['students']]
+        students = [Student(student['id'], student['name'], student['course_ids']) for student in data['students']]
+        f.close()
+        return students

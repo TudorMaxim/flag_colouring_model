@@ -15,5 +15,7 @@ class Course:
     def from_json(path=Constants.DEFAULT_DATASET):
         f = open(path, 'r')
         data = json.load(f)
-        return [Course(course['id'], course['name'], course['teacher_id']) for course in data['courses']]
+        courses = [Course(course['id'], course['name'], course['teacher_id']) for course in data['courses']]
+        f.close()
+        return courses
     

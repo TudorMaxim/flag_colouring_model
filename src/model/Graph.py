@@ -52,3 +52,14 @@ class Graph:
             if not self.valid_colouring_for(vertex, colour_map): # 2 adjacent vertices having the same colour
                 return False
         return True
+
+    def density(self) -> float:
+        vertices = self.get_vertices()
+        vertices_cnt = len(vertices)
+        denominator = vertices_cnt * (vertices_cnt - 1) / 2
+        numerator = 0
+        for i in range(vertices_cnt):
+            for j in range(i + 1, vertices_cnt):
+                numerator += 1 if self.check_edge(vertices[i], vertices[j]) else 0
+        return numerator / denominator
+    

@@ -8,7 +8,8 @@ from utils.Conflicts import Conflicts
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
 from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
-from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
+from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
+from algorithms.EvolutionaryAlgorithmConfig import EvolutionaryAlgorithmConfig
 from utils.Helpers import Helpers
 
 
@@ -24,7 +25,7 @@ def setup_parser() -> ArgumentParser:
     parser.add_argument(
         '--dataset',
         '-d',
-        default='./datasets/small_dataset.json',
+        default='./datasets/dataset_c8_s12_t3.json',
         help='Path to the dataset inteded to be used'
     )
     parser.add_argument(
@@ -60,6 +61,13 @@ def setup_parser() -> ArgumentParser:
         help='Selection method to be used for the evolutionary algorithm'
     )
     parser.add_argument(
+        '--crossover',
+        '-c',
+        default='one_point',
+        choices=['one_point', 'two_points', 'uniform'],
+        help='Crossover method to be used when producing offspring'
+    )
+    parser.add_argument(
         '--debug',
         '-D',
         default=False,
@@ -79,7 +87,7 @@ if __name__ == '__main__':
     teachers = Helpers.build_ids_map(Teacher.from_json(args.dataset))
     courses = Helpers.build_ids_map(Course.from_json(args.dataset))
     conflict_graph = Conflicts.build_graph(list(students.values()), list(teachers.values()))
-    
+    print(f'Graph Density: {conflict_graph.density()}\n')
     options = {
         'ldo': LargestDegreeOrdering,
         'dsatur': DegreeOfSaturation,
@@ -98,6 +106,7 @@ if __name__ == '__main__':
         colouring_algorithm.mutation_probability = int(args.mutation)
         colouring_algorithm.population_model = EvolutionaryAlgorithmConfig(args.model)
         colouring_algorithm.selection_method = EvolutionaryAlgorithmConfig(args.selection)
+        colouring_algorithm.crossover_method = EvolutionaryAlgorithmConfig(args.crossover)
         colouring_algorithm.debug = args.debug
     
     print(f'\nExecuting algorithm: {args.algorithm}\n')
@@ -108,8 +117,12 @@ if __name__ == '__main__':
     colouring = colouring_algorithm.run(colours_set)
     elapsed = datetime.now() - start_time
 
-    Helpers.print_timetable(courses, colouring)
+    timetable = colouring
+    if isinstance(colouring_algorithm, EvolutionaryAlgorithm):
+        timetable = colouring[0]
+    
+    Helpers.print_timetable(courses, timetable)
 
-    print(f'Used colours: {Helpers.get_used_colours_count(colouring)}')
+    print(f'Used colours: {Helpers.get_used_colours_count(timetable)}')
 
     print(f'\n\nElapsed time: {elapsed.total_seconds() * 1000} ms')

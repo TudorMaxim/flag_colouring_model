@@ -1,7 +1,8 @@
 import csv
 from typing import List
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
-from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
+from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
+from algorithms.EvolutionaryAlgorithmConfig import EvolutionaryAlgorithmConfig
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
 from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
 from model.Course import Course
@@ -38,7 +39,8 @@ class TimetablingController:
         generations_cnt: int = 100,
         mutation_rate: int = 60,
         population_model: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.STEADY_STATE_POPULATION,
-        selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION
+        selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION,
+        crossover_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ONE_POINT_CROSSOVER
     ) -> None:
         options = {
             'Largest Degree Ordering Algorithm': LargestDegreeOrdering,
@@ -58,6 +60,7 @@ class TimetablingController:
             self.algorithm.mutation_probability = mutation_rate
             self.algorithm.population_model = population_model
             self.algorithm.selection_method = selection_method
+            self.algorithm.crossover_method = crossover_method
     
     def set_penalties(self, invalid_colouring: int, overcrowding: int, fragmentation: int, uniformity: int) -> None:
         Constants.IVALID_COLOURING_PENALTY = invalid_colouring
