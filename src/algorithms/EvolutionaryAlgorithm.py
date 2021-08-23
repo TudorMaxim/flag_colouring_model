@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from copy import deepcopy
 from typing import List, Tuple
-from enum import Enum
 from random import randint, shuffle
 from threading import Thread
 from model.Course import Course
@@ -15,14 +14,9 @@ from algorithms.AbstractColouringAlgorithm import AbstractColouringAlgorithm
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
+from algorithms.EvolutionaryAlgorithmConfig import EvolutionaryAlgorithmConfig
 from utils.Helpers import Helpers
 
-
-class EvolutionaryAlgorithmConfig(Enum):
-    GENERATIONAL_POPULATION = 'generational'
-    STEADY_STATE_POPULATION = 'steady_state'
-    ROULETTE_WHEEL_SELECTION = 'roulette_wheel'
-    TOURNAMENT_SELECTION = 'tournament'
 
 class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
     def __init__(
@@ -33,6 +27,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         courses_map: dict[int, Course] = None,
         population_model: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.GENERATIONAL_POPULATION,
         selection_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION,
+        crossover_method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ONE_POINT_CROSSOVER
     ) -> None:
         super().__init__(graph, students_map, teachers_map, courses_map)
         self.generations_cnt = Constants.GENERATIONS_CNT
@@ -40,6 +35,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         self.mutation_probability = Constants.MUTATION_PROBABILITY
         self.population_model = population_model
         self.selection_method = selection_method
+        self.crossover_method = crossover_method
         self.debug = False # used to plot the evolution of the population.
     
     def __heuristic_task(self, algorithm: AbstractColouringAlgorithm, colours_set: List, results: List, index: int) -> None:
@@ -172,7 +168,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
         avegare_fitness_y_axis = [self.__get_average_fitness(population)]
         for generation in range(self.generations_cnt):
             parent1, parent2 = self.__selection(population)
-            offspring1, offspring2 = parent1.crossover(parent2)
+            offspring1, offspring2 = parent1.crossover(parent2, method=self.crossover_method)
             offspring1.mutate(self.mutation_probability, colours_set)
             offspring2.mutate(self.mutation_probability, colours_set)
 
@@ -224,7 +220,7 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
             shuffle(population)
             next_generation = []
             for i in range(1, len(population), 2):
-                offspring1, offspring2 = population[i][0].crossover(population[i - 1][0])
+                offspring1, offspring2 = population[i][0].crossover(population[i - 1][0], method=self.crossover_method)
                 offspring1.mutate(self.mutation_probability, colours_set)
                 offspring2.mutate(self.mutation_probability, colours_set)
                 next_generation.append((offspring1, offspring1.fitness()))
@@ -255,7 +251,8 @@ class EvolutionaryAlgorithm(AbstractColouringAlgorithm):
     def run(self, colours_set: List) -> Tuple[dict[int, int], List, List, List]:
         if self.debug:
             print(f'Using a {self.population_model.value} population with {self.population_cnt} individuals.')
-            print(f'Using {self.selection_method.value} selection.\n')
+            print(f'Using {self.selection_method.value} selection.')
+            print(f'Using {self.crossover_method.value} crossover.\n')
         if self.population_model == EvolutionaryAlgorithmConfig.STEADY_STATE_POPULATION:
             return self.__steady_state(colours_set)
         elif self.population_model == EvolutionaryAlgorithmConfig.GENERATIONAL_POPULATION:

@@ -4,7 +4,8 @@ from setup_imports import setup_imports
 from utils import Constants
 setup_imports()
 
-from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
+from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
+from algorithms.EvolutionaryAlgorithmConfig import EvolutionaryAlgorithmConfig
 from utils.Helpers import Helpers
 from utils.Conflicts import Conflicts
 from model.Teacher import Teacher

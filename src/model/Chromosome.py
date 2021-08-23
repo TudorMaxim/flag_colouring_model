@@ -9,6 +9,7 @@ from model.Student import Student
 from model.Teacher import Teacher
 from utils import Constants
 from utils.Helpers import Helpers
+from algorithms.EvolutionaryAlgorithmConfig import EvolutionaryAlgorithmConfig
 
 
 class Chromosome:
@@ -117,8 +118,7 @@ class Chromosome:
         fitness = score * Helpers.get_used_colours_count(self.__genes)
         return fitness + self.penalty()
 
-    # Permutation One Point Crossover function
-    def crossover(self, other) -> Tuple:
+    def __one_point_crossover(self, other) -> Tuple:
         parent1 = list(map(lambda item: item[1], sorted(self.__genes.items(), key=lambda item: item[0])))
         parent2 = list(map(lambda item: item[1], sorted(other.get_colouring().items(), key=lambda item: item[0])))
         assert(len(parent1) == len(parent2))
@@ -143,6 +143,61 @@ class Chromosome:
         offspring2 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring2)
         return offspring1, offspring2
 
+    def __two_points_crossover(self, other) -> Tuple:
+        parent1 = list(map(lambda item: item[1], sorted(self.__genes.items(), key=lambda item: item[0])))
+        parent2 = list(map(lambda item: item[1], sorted(other.get_colouring().items(), key=lambda item: item[0])))
+        assert(len(parent1) == len(parent2))
+
+        courses_cnt = len(parent1)
+        cut_point1 = randint(1, courses_cnt / 2)
+        cut_point2 = randint(cut_point1 + 1, courses_cnt - 1)
+        offspring1_colours = [0] * courses_cnt
+        offspring1_colours[:cut_point1] = parent1[:cut_point1]
+        offspring1_colours[cut_point1:cut_point2] = parent2[cut_point1:cut_point2]
+        offspring1_colours[cut_point2:] = parent1[cut_point2:]
+        offspring2_colours = [0] * courses_cnt
+        offspring2_colours[:cut_point1] = parent2[:cut_point1]
+        offspring2_colours[cut_point1:cut_point2] = parent1[cut_point1:cut_point2]
+        offspring2_colours[cut_point2:] = parent2[cut_point2:]
+
+        offspring1 = {}
+        offspring2 = {}
+        for i in range(len(offspring1_colours)):
+            offspring1[i + 1] = offspring1_colours[i]
+        for i in range(len(offspring2_colours)):
+            offspring2[i + 1] = offspring2_colours[i]
+
+        offspring1 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring1)
+        offspring2 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring2)
+        return offspring1, offspring2
+
+    def __uniform_crossover(self, other) -> Tuple:
+        parent1 = list(map(lambda item: item[1], sorted(self.__genes.items(), key=lambda item: item[0])))
+        parent2 = list(map(lambda item: item[1], sorted(other.get_colouring().items(), key=lambda item: item[0])))
+        assert(len(parent1) == len(parent2))
+
+        selection = [randint(0, 1) for _ in range(len(parent1))]
+        offspring1 = {}
+        offspring2 = {}
+        for i in range(len(selection)):
+            if selection[i] == 0:
+                offspring1[i + 1] = parent1[i]
+                offspring2[i + 1] = parent2[i]
+            else:
+                offspring2[i + 1] = parent1[i]
+                offspring1[i + 1] = parent2[i]
+        offspring1 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring1)
+        offspring2 = Chromosome(self.__graph, self.__students_map, self.__teachers_map, self.__courses_map, offspring2)
+        return offspring1, offspring2
+    
+    def crossover(self, other, method: EvolutionaryAlgorithmConfig = EvolutionaryAlgorithmConfig.ONE_POINT_CROSSOVER) -> Tuple:
+        if method == EvolutionaryAlgorithmConfig.ONE_POINT_CROSSOVER:
+            return self.__one_point_crossover(other)
+        elif method == EvolutionaryAlgorithmConfig.TWO_POINTS_CROSSOVER:
+            return self.__two_points_crossover(other)
+        else:
+            return self.__uniform_crossover(other)
+    
     # Mutation function that randomly changes an entire colour class
     def colour_class_mutation(self, probability: int, colour_set: List[int]) -> None:
         p = randint(0, 100)

@@ -79,7 +79,7 @@ QPushButton:hover:!pressed {
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>205</height>
+       <height>245</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -97,7 +97,7 @@ QPushButton:hover:!pressed {
         <x>0</x>
         <y>0</y>
         <width>1027</width>
-        <height>111</height>
+        <height>150</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -109,7 +109,7 @@ QPushButton:hover:!pressed {
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>0</height>
+        <height>150</height>
        </size>
       </property>
       <attribute name="label">
@@ -194,6 +194,32 @@ QPushButton:hover:!pressed {
            </item>
           </widget>
          </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="crossover_method_label">
+           <property name="text">
+            <string>Crossover Method:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QComboBox" name="crossover_method_combo_box">
+           <item>
+            <property name="text">
+             <string>One-Point Crossover</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Two-Points Crossover</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Uniform Crossover</string>
+            </property>
+           </item>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
@@ -203,7 +229,7 @@ QPushButton:hover:!pressed {
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>279</width>
+        <width>1027</width>
         <height>162</height>
        </rect>
       </property>
@@ -292,8 +318,8 @@ QPushButton:hover:!pressed {
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>307</width>
-        <height>133</height>
+        <width>1027</width>
+        <height>152</height>
        </rect>
       </property>
       <property name="maximumSize">

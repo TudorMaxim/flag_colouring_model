@@ -2,7 +2,8 @@ import pyqtgraph as pg
 from PyQt5.QtCore import QThreadPool
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QStackedWidget, QVBoxLayout, QWidget
-from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
+from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
+from algorithms.EvolutionaryAlgorithmConfig import EvolutionaryAlgorithmConfig
 from controller.TimetablingController import TimetablingController
 from utils.Helpers import Helpers
 from views.colouring.ColouringWidget import ColouringWidget
@@ -49,12 +50,18 @@ class ConfigurationFormWidget(QWidget):
     def submit(self) -> None:
         try:
             population_model = EvolutionaryAlgorithmConfig.STEADY_STATE_POPULATION
-            if 'Generational' in str(self.ui.population_model_combo_box.currentText()):
+            if 'Generational' in self.ui.population_model_combo_box.currentText():
                 population_model = EvolutionaryAlgorithmConfig.GENERATIONAL_POPULATION
             
             selection_method = EvolutionaryAlgorithmConfig.ROULETTE_WHEEL_SELECTION
-            if 'Tournament' in str(self.ui.selection_method_combo_box.currentText()):
+            if 'Tournament' in self.ui.selection_method_combo_box.currentText():
                 selection_method = EvolutionaryAlgorithmConfig.TOURNAMENT_SELECTION
+            
+            crossover_method = EvolutionaryAlgorithmConfig.ONE_POINT_CROSSOVER
+            if 'Two-Points' in self.ui.crossover_method_combo_box.currentText():
+                crossover_method = EvolutionaryAlgorithmConfig.TWO_POINTS_CROSSOVER
+            elif 'Uniform' in self.ui.crossover_method_combo_box.currentText():
+                crossover_method = EvolutionaryAlgorithmConfig.UNIFORM_CROSSOVER
             
             self.timetabling_controller.set_algorithm(
                 name=str(self.ui.algorithm_combo_box.currentText()),
@@ -62,8 +69,8 @@ class ConfigurationFormWidget(QWidget):
                 generations_cnt=int(self.ui.generations_input.text()),
                 mutation_rate=int(self.ui.mutation_rate_input.text()),
                 population_model=population_model,
-                selection_method=selection_method
-
+                selection_method=selection_method,
+                crossover_method=crossover_method
             )
             self.timetabling_controller.set_constants(
                 max_courses_per_day=int(self.ui.max_courses_per_day_input.text()),
@@ -130,7 +137,7 @@ class ConfigurationFormWidget(QWidget):
     
     def toggle_advanced_options(self, algorithm: str):
         advanced_inputs = [
-            self.ui.selection_method_combo_box, self.ui.population_model_combo_box, 
+            self.ui.selection_method_combo_box, self.ui.population_model_combo_box, self.ui.crossover_method_combo_box, 
             self.ui.generations_input, self.ui.population_size_input, self.ui.mutation_rate_input,
             self.ui.max_courses_per_day_input, self.ui.max_daily_break_input, 
             self.ui.invalid_solution_input, self.ui.overcrowding_input,

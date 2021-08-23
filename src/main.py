@@ -8,7 +8,8 @@ from utils.Conflicts import Conflicts
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
 from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
-from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm, EvolutionaryAlgorithmConfig
+from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
+from algorithms.EvolutionaryAlgorithmConfig import EvolutionaryAlgorithmConfig
 from utils.Helpers import Helpers
 
 
@@ -24,7 +25,7 @@ def setup_parser() -> ArgumentParser:
     parser.add_argument(
         '--dataset',
         '-d',
-        default='./datasets/small_dataset.json',
+        default='./datasets/dataset_c8_s12_t3.json',
         help='Path to the dataset inteded to be used'
     )
     parser.add_argument(
@@ -58,6 +59,13 @@ def setup_parser() -> ArgumentParser:
         default='roulette_wheel',
         choices=['roulette_wheel', 'tournament'],
         help='Selection method to be used for the evolutionary algorithm'
+    )
+    parser.add_argument(
+        '--crossover',
+        '-c',
+        default='one_point',
+        choices=['one_point', 'two_points', 'uniform'],
+        help='Crossover method to be used when producing offspring'
     )
     parser.add_argument(
         '--debug',
@@ -98,6 +106,7 @@ if __name__ == '__main__':
         colouring_algorithm.mutation_probability = int(args.mutation)
         colouring_algorithm.population_model = EvolutionaryAlgorithmConfig(args.model)
         colouring_algorithm.selection_method = EvolutionaryAlgorithmConfig(args.selection)
+        colouring_algorithm.crossover_method = EvolutionaryAlgorithmConfig(args.crossover)
         colouring_algorithm.debug = args.debug
     
     print(f'\nExecuting algorithm: {args.algorithm}\n')
