@@ -5,7 +5,7 @@ import pyqtgraph as pg
 from math import cos, radians, sin
 from PyQt5.QtWidgets import QLabel, QVBoxLayout, QWidget
 from model.Graph import Graph
-from utils.Constants import COLORS
+from utils.Constants import COLOURS
 from utils.Helpers import Helpers
 
 label_style = '''
@@ -79,7 +79,7 @@ class ColouringWidget(QWidget):
                 'pos': (x, y),
                 'size': 2, 
                 'pen': {'color': 'w', 'width': 2},
-                'brush': QColor(COLORS[colour])
+                'brush': QColor(COLOURS[colour])
             }
             coloured_points.append(point)
         scatter.addPoints(coloured_points)
