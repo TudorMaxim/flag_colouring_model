@@ -1,5 +1,7 @@
 from argparse import ArgumentParser, BooleanOptionalAction
 from datetime import datetime
+from model.EntityType import EntityType
+from model.Factory import Factory
 from model.Student import Student
 from model.Teacher import Teacher
 from model.Course import Course
@@ -83,9 +85,9 @@ if __name__ == '__main__':
 
     print(f'\nParsing dataset {args.dataset}\n')
 
-    students = Helpers.build_ids_map(Student.from_json(args.dataset))
-    teachers = Helpers.build_ids_map(Teacher.from_json(args.dataset))
-    courses = Helpers.build_ids_map(Course.from_json(args.dataset))
+    students = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.STUDENT, path=args.dataset))
+    teachers = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.TEACHER, path=args.dataset))
+    courses = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.COURSE, path=args.dataset))
     conflict_graph = Conflicts.build_graph(list(students.values()), list(teachers.values()))
     print(f'Graph Density: {conflict_graph.density()}\n')
     options = {

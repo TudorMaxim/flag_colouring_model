@@ -5,9 +5,9 @@ setup_imports()
 from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
 from utils.Helpers import Helpers
 from utils.Conflicts import Conflicts
-from model.Factory import Factory
-from model.EntityType import EntityType
-
+from model.Teacher import Teacher
+from model.Course import Course
+from model.Student import Student
 
 class RecursiveLargestFirstTests(unittest.TestCase):
     def test_algorithm(self):

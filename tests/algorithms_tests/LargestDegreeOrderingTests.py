@@ -5,16 +5,16 @@ setup_imports()
 from algorithms.LargestDegreeOrdering import LargestDegreeOrdering
 from utils.Helpers import Helpers
 from utils.Conflicts import Conflicts
-from model.Teacher import Teacher
-from model.Course import Course
-from model.Student import Student
+from model.Factory import Factory
+from model.EntityType import EntityType
+
 
 class LargestDegreeOrderingTests(unittest.TestCase):
     def test_algorithm(self):
         dataset = 'tests/mock_data.json'
-        students = Helpers.build_ids_map(Student.from_json(dataset))
-        teachers = Helpers.build_ids_map(Teacher.from_json(dataset))
-        courses = Helpers.build_ids_map(Course.from_json(dataset))
+        students = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.STUDENT, path=dataset))
+        teachers = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.TEACHER, path=dataset))
+        courses = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.COURSE, path=dataset))
         conflict_graph = Conflicts.build_graph(list(students.values()), list(teachers.values()))
         algorithm = LargestDegreeOrdering(
             graph=conflict_graph,

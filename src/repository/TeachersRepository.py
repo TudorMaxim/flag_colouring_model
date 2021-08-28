@@ -1,3 +1,5 @@
+from model.EntityType import EntityType
+from model.Factory import Factory
 from model.Teacher import Teacher
 from utils import Constants
 from utils.Helpers import Helpers
@@ -6,7 +8,7 @@ from typing import List
 
 class TeachersRepository:
     def __init__(self, dataset: str = Constants.DEFAULT_DATASET) -> None:
-        self.teachers = Helpers.build_ids_map(Teacher.from_json(path=dataset))
+        self.teachers = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.TEACHER, path=dataset))
 
     def add(self, name: str, course_ids: List[int]) -> None:
         teacher_with_max_id = max(self.teachers.values(), key=lambda teacher: teacher.id)
@@ -27,4 +29,4 @@ class TeachersRepository:
         return self.teachers.values()
     
     def change_dataset(self, dataset: str) -> None:
-        self.teachers = Helpers.build_ids_map(Teacher.from_json(path=dataset))
+        self.teachers = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.TEACHER, path=dataset))
