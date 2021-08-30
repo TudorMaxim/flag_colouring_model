@@ -1,5 +1,3 @@
-import json
-from utils import Constants
 from typing import Optional
 
 class Course:

@@ -1,6 +1,4 @@
-import json
 from model.Person import Person
-from utils import Constants
 
 class Student(Person):
     def __init__(self, id: int, name: str, course_ids=[]):

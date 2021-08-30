@@ -2,9 +2,6 @@ from argparse import ArgumentParser, BooleanOptionalAction
 from datetime import datetime
 from model.EntityType import EntityType
 from model.Factory import Factory
-from model.Student import Student
-from model.Teacher import Teacher
-from model.Course import Course
 from utils import Constants
 from utils.Conflicts import Conflicts
 from algorithms.DegreeOfSaturation import DegreeOfSaturation
