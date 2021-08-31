@@ -10,6 +10,7 @@ from algorithms.RecursiveLargestFirst import RecursiveLargestFirst
 from algorithms.EvolutionaryAlgorithm import EvolutionaryAlgorithm
 from algorithms.EvolutionaryAlgorithmConfig import EvolutionaryAlgorithmConfig
 from utils.Helpers import Helpers
+from model.Chromosome import Chromosome
 
 
 def setup_parser() -> ArgumentParser:
@@ -107,11 +108,10 @@ if __name__ == '__main__':
         colouring_algorithm.selection_method = EvolutionaryAlgorithmConfig(args.selection)
         colouring_algorithm.crossover_method = EvolutionaryAlgorithmConfig(args.crossover)
         colouring_algorithm.debug = args.debug
-    
-    print(f'\nExecuting algorithm: {args.algorithm}\n')
+
+    print(f'Executing algorithm: {args.algorithm}\n')
 
     colours_set = Helpers.generate_colour_set(teachers.values())
-
     start_time = datetime.now()
     colouring = colouring_algorithm.run(colours_set)
     elapsed = datetime.now() - start_time
@@ -119,9 +119,17 @@ if __name__ == '__main__':
     timetable = colouring
     if isinstance(colouring_algorithm, EvolutionaryAlgorithm):
         timetable = colouring[0]
-    
+
     Helpers.print_timetable(courses, timetable)
 
-    print(f'Used colours: {Helpers.get_used_colours_count(timetable)}')
+    print(f'\nUsed colours: {Helpers.get_used_colours_count(timetable)}')
 
-    print(f'\n\nElapsed time: {elapsed.total_seconds() * 1000} ms')
+    chromosome = Chromosome(
+        graph=conflict_graph,
+        students_map=students,
+        teachers_map=teachers,
+        courses_map=courses,
+        genes=timetable
+    )
+    print(f'Solution Fitness: {chromosome.fitness()}')
+    print(f'Elapsed time: {elapsed.total_seconds() * 1000} ms\n')
