@@ -4,6 +4,9 @@ from setup_imports import setup_imports
 setup_imports()
 
 from model.Course import Course
+from model.Factory import Factory
+from model.EntityType import EntityType
+
 
 class CourseTests(unittest.TestCase):
 
@@ -18,7 +21,7 @@ class CourseTests(unittest.TestCase):
         self.assertEqual(course.teacher_id, 1)
 
     def test_from_json(self):
-        courses = Course.from_json(path=self.mock_data)
+        courses = Factory.from_json(entity_type=EntityType.COURSE, path=self.mock_data)
         self.assertEqual(len(courses), 4)
         self.assertIsInstance(courses[0], Course)
         self.assertEqual(courses[0].id, 1)

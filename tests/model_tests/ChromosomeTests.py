@@ -1,23 +1,20 @@
 import unittest
-from model.Student import Student
 from setup_imports import setup_imports
-from utils.Helpers import Helpers
 setup_imports()
 
 from utils.Helpers import Helpers
 from utils.Conflicts import Conflicts
 from model.Chromosome import Chromosome
-from model.Student import Student
-from model.Teacher import Teacher
-from model.Course import Course
+from model.Factory import Factory
+from model.EntityType import EntityType
 
 
 class ChromosomeTests(unittest.TestCase):
     def setUp(self) -> None:
         dataset = 'tests/mock_data.json'
-        self.students = Helpers.build_ids_map(Student.from_json(path=dataset))
-        self.teachers = Helpers.build_ids_map(Teacher.from_json(path=dataset))
-        self.courses = Helpers.build_ids_map(Course.from_json(path=dataset))
+        self.students = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.STUDENT, path=dataset))
+        self.teachers = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.TEACHER, path=dataset))
+        self.courses = Helpers.build_ids_map(Factory.from_json(entity_type=EntityType.COURSE, path=dataset))
         self.conflict_graph = Conflicts.build_graph(students=self.students.values(), teachers=self.teachers.values())
         self.chromosome_valid = Chromosome(
             graph=self.conflict_graph,

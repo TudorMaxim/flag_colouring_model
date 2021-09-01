@@ -3,17 +3,17 @@ from setup_imports import setup_imports
 setup_imports()
 
 from utils.Conflicts import Conflicts
-from model.Student import Student
-from model.Teacher import Teacher
-from model.Course import Course
+from model.Factory import Factory
+from model.EntityType import EntityType
+
 
 class ConflictsTests(unittest.TestCase):
 
     def setUp(self) -> None:
         dataset = './tests/mock_data.json'
-        self.students = Student.from_json(dataset)
-        self.teachers = Teacher.from_json(dataset)
-        self.courses = Course.from_json(dataset)
+        self.students = Factory.from_json(entity_type=EntityType.STUDENT, path=dataset)
+        self.teachers = Factory.from_json(entity_type=EntityType.TEACHER, path=dataset)
+        self.courses = Factory.from_json(entity_type=EntityType.COURSE, path=dataset)
         self.conflict_graph = Conflicts.build_graph(list(self.students), list(self.teachers))
         
     def test_edge_beween_two_courses_of_a_student(self):

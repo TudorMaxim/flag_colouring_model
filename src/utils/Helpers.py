@@ -98,7 +98,7 @@ class Helpers:
         return entities
 
 
-    # Function that randomly assings courses to students
+    # Function that randomly assigns courses to students
     # A student may have many courses and a course may have many students
     @staticmethod
     def assign_courses_to_students(students: List, c: int, minn: int, maxx: int) -> List:

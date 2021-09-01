@@ -10,7 +10,7 @@ IVALID_COLOURING_PENALTY = 2 ** 10 # applied if a colour is invalid
 OVERCROWDING_PENALTY = 2 ** 6 # applied if a student/teacher has more than 6 courses a day
 FRAGMENTATION_PENALTY = 2 ** 5 # applied for each break longer than 2 hours for a teacher
 UNIFORMITY_PENALTY = 2 ** 4 # multiplied with the difference between the longest and shortest day of a teacher
-COLORS = ['',
+COLOURS = ['',
     '#1E90FF', '#D71868', '#50C878', '#6F00FF', '#CCFF00', '#BF00FF', '#8F00FF', '#B53389', '#B22222', '#E25822',
     '#B0BF1A', '#7CB9E8', '#C0E8D5', '#B284BE', '#72A0C1', '#EDEAE0', '#C46210', '#EFDECD', '#3B7A57', '#FFBF00',
     '#FF7E00', '#9966CC', '#3DDC84', '#CD9575', '#665D1E', '#915C83', '#841B2D', '#FAEBD7', '#8DB600', '#00FFFF',

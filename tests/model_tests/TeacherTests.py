@@ -4,6 +4,9 @@ setup_imports()
 
 from model.Teacher import Teacher
 from utils.Constants import COLOURS_CNT
+from model.Factory import Factory
+from model.EntityType import EntityType
+
 
 class TeacherTests(unittest.TestCase):
 
@@ -19,7 +22,7 @@ class TeacherTests(unittest.TestCase):
         self.assertEqual(teacher.weights, None)
 
     def test_from_json(self):
-        teachers = Teacher.from_json(path=self.mock_data)
+        teachers = Factory.from_json(entity_type=EntityType.TEACHER, path=self.mock_data)
         self.assertEqual(len(teachers), 2)
         self.assertIsInstance(teachers[0], Teacher)
         self.assertEqual(teachers[0].id, 1)
